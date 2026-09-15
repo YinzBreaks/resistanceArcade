@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resistance Arcade — Play free. Fund relief.</title>
+<meta name="description" content="Free satirical browser games with no paywalls, ads, or trackers. Half of every tip, after fees, goes to relief partners chosen each cycle. Built by a Western PA teacher.">
+<link rel="canonical" href="https://resistance-games.com/">
+<meta name="theme-color" content="#0B0B0D">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Resistance Arcade">
+<meta name="application-name" content="Resistance Arcade">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-180.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23D4F551'/%3E%3Ccircle cx='32' cy='24' r='9' fill='%230B0B0D'/%3E%3Cpath d='M26 34h12l4 12H22z' fill='%230B0B0D'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Resistance Arcade">
+<meta property="og:url" content="https://resistance-games.com/">
+<meta property="og:title" content="Resistance Arcade — Play free. Fund relief.">
+<meta property="og:description" content="Free satirical games. No paywalls, no ads, no trackers. Half of every tip goes to relief.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Resistance Arcade — Play free. Fund relief.">
+<meta name="twitter:description" content="Free satirical games. No paywalls, no ads, no trackers. Half of every tip goes to relief.">
+
+<style>
+/* ============================================================
+   RESISTANCE ARCADE — resistance-games.com
+   Brand system v2 · "editorial protest print"
+
+   Two colours carry meaning, nothing is decorative:
+     PAPER  — free, play, the games themselves
+     SIGNAL — support, money, the ask
+   Everything else is ink and hairlines.
+   Single file. No CDNs, no external fonts, no trackers.
+   ============================================================ */
+
+:root{
+  /* --- ink --- */
+  --ink-000:#0B0B0D;   /* page ground */
+  --ink-050:#111114;   /* raised surface */
+  --ink-100:#17171B;   /* card */
+  --ink-150:#1E1E23;   /* card hover */
+  --ink-200:#2A2A31;   /* strong hairline */
+
+  /* --- paper --- */
+  --paper:#F5F2EC;
+  --paper-80:rgba(245,242,236,.80);
+  --paper-60:rgba(245,242,236,.60);
+  --paper-42:rgba(245,242,236,.42);
+  --paper-28:rgba(245,242,236,.28);
+
+  /* --- hairlines --- */
+  --line:rgba(245,242,236,.10);
+  --line-soft:rgba(245,242,236,.06);
+  --line-hard:rgba(245,242,236,.18);
+
+  /* --- signal --- */
+  --signal:#D4F551;
+  --signal-lift:#E2FF7A;
+  --signal-deep:#A6C633;
+  --signal-08:rgba(212,245,81,.08);
+  --signal-16:rgba(212,245,81,.16);
+  --signal-32:rgba(212,245,81,.32);
+
+  /* --- type --- */
+  --sans:"Segoe UI Variable Display","Segoe UI",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Inter,system-ui,Arial,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular","Cascadia Mono","Segoe UI Mono","Roboto Mono",Menlo,Consolas,monospace;
+
+  /* --- metrics --- */
+  --max:1200px;
+  --pad:clamp(20px, 5vw, 56px);
+  --r-xs:6px;
+  --r-sm:10px;
+  --r-md:14px;
+  --r-lg:20px;
+  --safe-t:env(safe-area-inset-top, 0px);
+  --safe-b:env(safe-area-inset-bottom, 0px);
+
+  /* --- rhythm --- */
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px;
+  --s5:48px; --s6:64px; --s7:96px; --s8:128px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+}
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  margin:0;
+  min-height:100vh;
+  min-height:100dvh;
+  background:var(--ink-000);
+  color:var(--paper);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.6;
+  font-feature-settings:"kern" 1,"liga" 1;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+  padding-bottom:var(--safe-b);
+}
+body.is-locked{ overflow:hidden; }
+
+img{ max-width:100%; display:block; }
+a{ color:inherit; }
+
+::selection{ background:var(--signal); color:#0B0B0D; }
+
+:where(a,button,[tabindex]):focus-visible{
+  outline:2px solid var(--signal);
+  outline-offset:3px;
+  border-radius:4px;
+}
+
+.sr-only{
+  position:absolute; width:1px; height:1px;
+  margin:-1px; padding:0; border:0;
+  clip:rect(0 0 0 0); clip-path:inset(50%);
+  overflow:hidden; white-space:nowrap;
+}
+
+.skip{
+  position:fixed;
+  left:50%; top:-80px;
+  transform:translateX(-50%);
+  z-index:300;
+  padding:12px 22px;
+  background:var(--signal);
+  color:#0B0B0D;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  text-decoration:none;
+  border-radius:0 0 var(--r-sm) var(--r-sm);
+  transition:top .18s ease;
+}
+.skip:focus{ top:0; }
+
+/* Film grain — the print texture that replaces the old CRT gimmick */
+.grain{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:.05;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion:reduce){ .grain{ opacity:.03; } }
+
+/* ============================================================
+   LAYOUT PRIMITIVES
+   ============================================================ */
+
+.wrap{
+  width:100%;
+  max-width:var(--max);
+  margin:0 auto;
+  padding-left:var(--pad);
+  padding-right:var(--pad);
+}
+
+.band{
+  position:relative;
+  z-index:2;
+  padding-top:clamp(56px, 9vw, 112px);
+  padding-bottom:clamp(56px, 9vw, 112px);
+  border-top:1px solid var(--line);
+  scroll-margin-top:72px;
+}
+.band--flush{ border-top:0; }
+
+/* Section header: index number + title + rule */
+.sechead{
+  display:flex;
+  align-items:baseline;
+  gap:clamp(14px, 2.4vw, 24px);
+  margin-bottom:var(--s3);
+}
+.sechead__idx{
+  flex:0 0 auto;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.14em;
+  color:var(--signal);
+  padding-top:.55em;
+}
+.sechead__title{
+  margin:0;
+  font-size:clamp(26px, 4.2vw, 42px);
+  font-weight:800;
+  letter-spacing:-.035em;
+  line-height:1.05;
+  color:var(--paper);
+}
+.sechead__rule{
+  flex:1;
+  height:1px;
+  background:var(--line);
+  transform:translateY(-.35em);
+}
+.sechead__meta{
+  flex:0 0 auto;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+  padding-top:.55em;
+  white-space:nowrap;
+}
+@media (max-width:640px){ .sechead__meta{ display:none; } }
+
+.seclede{
+  margin:0 0 clamp(32px, 5vw, 56px);
+  max-width:62ch;
+  font-size:clamp(16px, 1.9vw, 18px);
+  line-height:1.7;
+  color:var(--paper-60);
+}
+
+/* Small mono eyebrow label */
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+}
+.eyebrow .tick{
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--signal);
+}
+
+/* ============================================================
+   CYCLE BAR
+   ============================================================ */
+
+.cyclebar{
+  position:relative;
+  z-index:12;
+  background:var(--signal);
+  color:#0B0B0D;
+  padding-top:var(--safe-t);
+  overflow:hidden;
+}
+.cyclebar__in{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:9px var(--pad);
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  text-align:center;
+  line-height:1.5;
+}
+.cyclebar__in b{ font-weight:800; }
+.cyclebar__tag{
+  flex:0 0 auto;
+  padding:2px 8px;
+  border:1px solid rgba(11,11,13,.34);
+  border-radius:999px;
+  font-size:9.5px;
+  letter-spacing:.14em;
+}
+@media (max-width:720px){ .cyclebar__tag{ display:none; } }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+
+.nav{
+  position:sticky;
+  top:0;
+  z-index:11;
+  background:rgba(11,11,13,.72);
+  -webkit-backdrop-filter:saturate(180%) blur(18px);
+  backdrop-filter:saturate(180%) blur(18px);
+  border-bottom:1px solid var(--line);
+}
+.nav__in{
+  display:flex;
+  align-items:center;
+  gap:var(--s3);
+  height:62px;
+}
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:11px;
+  text-decoration:none;
+  flex:0 0 auto;
+}
+.brand__mark{
+  width:30px; height:30px;
+  border-radius:8px;
+  display:block;
+}
+.brand__type{
+  display:flex;
+  flex-direction:column;
+  line-height:1;
+}
+.brand__type b{
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:-.02em;
+  color:var(--paper);
+}
+.brand__type span{
+  margin-top:3px;
+  font-family:var(--mono);
+  font-size:8.5px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+}
+@media (max-width:520px){ .brand__type span{ display:none; } }
+
+.nav__links{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:2px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.nav__links::-webkit-scrollbar{ display:none; }
+
+.navlink{
+  flex:0 0 auto;
+  appearance:none;
+  border:0;
+  background:none;
+  padding:9px 13px;
+  border-radius:var(--r-xs);
+  font-family:var(--sans);
+  font-size:13.5px;
+  font-weight:600;
+  letter-spacing:-.005em;
+  color:var(--paper-60);
+  text-decoration:none;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:color .16s ease, background .16s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+@media (hover:hover){ .navlink:hover{ color:var(--paper); background:rgba(245,242,236,.06); } }
+.navlink--cta{
+  margin-left:8px;
+  padding:9px 16px;
+  background:var(--signal);
+  color:#0B0B0D;
+  font-weight:700;
+  border-radius:999px;
+}
+@media (hover:hover){ .navlink--cta:hover{ background:var(--signal-lift); color:#0B0B0D; } }
+/* Below the breakpoint the links overflow and scroll. `flex-end` would
+   strand the first items off the left edge with no way to reach them,
+   so the row anchors to the start instead. */
+@media (max-width:760px){
+  .nav__links{ justify-content:flex-start; }
+}
+@media (max-width:600px){
+  .nav__in{ gap:var(--s2); }
+  .navlink{ padding:9px 10px; font-size:13px; }
+}
+/* Logomark carries the brand once there is no room for the wordmark */
+@media (max-width:520px){
+  .brand__type{ display:none; }
+  .nav__in{ gap:12px; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero{
+  position:relative;
+  z-index:2;
+  padding-top:clamp(56px, 9vw, 108px);
+  padding-bottom:clamp(40px, 6vw, 72px);
+  overflow:hidden;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  top:-40%;
+  right:-10%;
+  width:min(760px, 90vw);
+  aspect-ratio:1;
+  background:radial-gradient(circle, var(--signal-16) 0%, rgba(212,245,81,0) 66%);
+  pointer-events:none;
+}
+
+.hero__eyebrow{ margin-bottom:clamp(22px, 3.6vw, 34px); }
+
+.hero__title{
+  margin:0;
+  font-size:clamp(46px, 12.5vw, 132px);
+  font-weight:800;
+  line-height:.90;
+  letter-spacing:-.055em;
+  text-transform:uppercase;
+  color:var(--paper);
+}
+.hero__title .the{
+  display:block;
+  font-family:var(--mono);
+  font-size:clamp(11px, 1.5vw, 14px);
+  font-weight:600;
+  letter-spacing:.34em;
+  line-height:1;
+  color:var(--signal);
+  margin-bottom:clamp(12px, 1.8vw, 20px);
+  text-transform:uppercase;
+}
+.hero__title .l2{ display:block; color:var(--signal); }
+
+.hero__lede{
+  margin:clamp(26px, 4vw, 40px) 0 0;
+  max-width:56ch;
+  font-size:clamp(17px, 2.1vw, 21px);
+  line-height:1.62;
+  color:var(--paper-60);
+}
+.hero__lede strong{ color:var(--paper); font-weight:650; }
+
+.hero__cta{
+  margin-top:clamp(28px, 4vw, 40px);
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.hero__cta .btn{ width:auto; }
+
+.hero__badges{
+  margin:clamp(30px, 4.4vw, 44px) 0 0;
+  padding:0;
+  list-style:none;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 10px;
+}
+.hero__badges li{
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:6px 12px;
+}
+
+/* ============================================================
+   STAT STRIP
+   ============================================================ */
+
+.stats{
+  position:relative;
+  z-index:2;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  background:var(--ink-050);
+}
+.stats__grid{
+  display:grid;
+  grid-template-columns:1fr;
+}
+@media (min-width:720px){ .stats__grid{ grid-template-columns:repeat(3, 1fr); } }
+
+.stat{
+  padding:clamp(24px, 3.4vw, 36px) 0;
+  border-bottom:1px solid var(--line);
+}
+.stat:last-child{ border-bottom:0; }
+@media (min-width:720px){
+  .stat{ border-bottom:0; border-left:1px solid var(--line); padding-left:clamp(24px, 3vw, 40px); }
+  .stat:first-child{ border-left:0; padding-left:0; }
+}
+.stat__label{
+  display:block;
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+  margin-bottom:12px;
+}
+.stat__value{
+  display:block;
+  font-size:clamp(28px, 4.6vw, 44px);
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-.04em;
+  font-variant-numeric:tabular-nums;
+  color:var(--paper);
+}
+.stat--signal .stat__value{ color:var(--signal); }
+.stat__sub{
+  display:block;
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.6;
+  color:var(--paper-42);
+}
+.stats__foot{
+  padding:0 0 clamp(22px, 3vw, 30px);
+  margin:0;
+  font-family:var(--mono);
+  font-size:11px;
+  line-height:1.8;
+  color:var(--paper-28);
+  max-width:88ch;
+}
+
+/* ============================================================
+   GAMES
+   ============================================================ */
+
+.games{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:clamp(14px, 1.6vw, 20px);
+}
+@media (min-width:760px){ .games{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+
+.game{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  padding:clamp(24px, 3vw, 34px);
+  background:var(--ink-100);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  transition:background .2s ease, border-color .2s ease, transform .2s ease;
+}
+@media (hover:hover){
+  .game:not(.game--soon):hover{
+    background:var(--ink-150);
+    border-color:var(--line-hard);
+    transform:translateY(-3px);
+  }
+  .game:not(.game--soon):hover .game__idx{ color:var(--signal); }
+}
+@media (prefers-reduced-motion:reduce){
+  .game{ transition:none; }
+  .game:hover{ transform:none; }
+}
+
+.game__top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:clamp(20px, 3vw, 30px);
+}
+.game__idx{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.12em;
+  color:var(--paper-28);
+  transition:color .2s ease;
+}
+.pill{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  padding:5px 10px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+.pill--live{
+  color:var(--paper);
+  background:var(--signal-16);
+  border:1px solid var(--signal-32);
+}
+.pill--live .dot{
+  width:5px; height:5px; border-radius:50%;
+  background:var(--signal);
+}
+.pill--soon{
+  color:var(--paper-42);
+  border:1px solid var(--line);
+}
+
+.game__title{
+  margin:0 0 12px;
+  font-size:clamp(26px, 3.4vw, 36px);
+  font-weight:800;
+  line-height:1.02;
+  letter-spacing:-.038em;
+  color:var(--paper);
+}
+.game--soon .game__title{ color:var(--paper-42); }
+
+.game__desc{
+  margin:0 0 clamp(22px, 3vw, 30px);
+  font-size:15.5px;
+  line-height:1.68;
+  color:var(--paper-60);
+  flex:1;
+  max-width:46ch;
+}
+
+.game__actions{ display:flex; flex-wrap:wrap; gap:10px; }
+.game__actions .btn{ width:auto; flex:1 1 auto; min-width:140px; }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn{
+  --btn-bg:transparent;
+  --btn-fg:var(--paper);
+  --btn-bd:var(--line-hard);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  width:100%;
+  min-height:48px;
+  padding:13px 22px;
+  background:var(--btn-bg);
+  color:var(--btn-fg);
+  border:1px solid var(--btn-bd);
+  border-radius:999px;
+  font-family:var(--sans);
+  font-size:14.5px;
+  font-weight:650;
+  letter-spacing:-.005em;
+  text-decoration:none;
+  text-align:center;
+  cursor:pointer;
+  transition:background .18s ease, color .18s ease, border-color .18s ease, transform .12s ease;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.btn:active{ transform:translateY(1px); }
+.btn .ico{ font-size:.95em; line-height:1; }
+
+/* Paper — free, play, the games */
+.btn--paper{ --btn-bg:var(--paper); --btn-fg:#0B0B0D; --btn-bd:var(--paper); font-weight:700; }
+@media (hover:hover){ .btn--paper:hover{ --btn-bg:#fff; --btn-bd:#fff; } }
+
+/* Signal — support, money, the ask */
+.btn--signal{ --btn-bg:var(--signal); --btn-fg:#0B0B0D; --btn-bd:var(--signal); font-weight:700; }
+@media (hover:hover){ .btn--signal:hover{ --btn-bg:var(--signal-lift); --btn-bd:var(--signal-lift); } }
+
+/* Outline — secondary */
+.btn--line{ --btn-bg:transparent; --btn-fg:var(--paper); --btn-bd:var(--line-hard); }
+@media (hover:hover){ .btn--line:hover{ --btn-bg:rgba(245,242,236,.07); --btn-bd:var(--paper-42); } }
+
+/* Quiet — tertiary, compact */
+.btn--quiet{
+  --btn-bg:transparent;
+  --btn-fg:var(--paper-60);
+  --btn-bd:var(--line);
+  min-height:42px;
+  padding:10px 18px;
+  font-size:13.5px;
+}
+@media (hover:hover){ .btn--quiet:hover{ --btn-fg:var(--signal); --btn-bd:var(--signal-32); --btn-bg:var(--signal-08); } }
+
+.btn[disabled]{
+  --btn-bg:transparent;
+  --btn-fg:var(--paper-28);
+  --btn-bd:var(--line-soft);
+  cursor:not-allowed;
+}
+.btn[disabled]:active{ transform:none; }
+
+/* ============================================================
+   PARTNERS
+   ============================================================ */
+
+.partners{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:clamp(14px, 1.6vw, 20px);
+}
+@media (min-width:820px){ .partners{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+
+.partner{
+  display:flex;
+  flex-direction:column;
+  padding:clamp(24px, 3vw, 34px);
+  background:var(--ink-100);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+}
+.partner__head{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding-bottom:var(--s3);
+  margin-bottom:var(--s3);
+  border-bottom:1px solid var(--line);
+}
+/* Slot for an approved logo. Replace the initials with an <img>
+   once the organization has given written permission. */
+.partner__mark{
+  flex:0 0 auto;
+  width:48px; height:48px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid var(--line-hard);
+  border-radius:var(--r-sm);
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.02em;
+  color:var(--paper-60);
+}
+.partner__scope{
+  display:block;
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:600;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+  color:var(--signal);
+  margin-bottom:5px;
+}
+.partner__name{
+  margin:0;
+  font-size:18px;
+  font-weight:750;
+  letter-spacing:-.022em;
+  line-height:1.25;
+  color:var(--paper);
+}
+.partner__body{
+  margin:0;
+  font-size:15px;
+  line-height:1.7;
+  color:var(--paper-60);
+}
+.partner__why{
+  margin-top:var(--s3);
+  padding-left:16px;
+  border-left:2px solid var(--signal-32);
+  font-size:14.5px;
+  line-height:1.7;
+  color:var(--paper-60);
+  flex:1;
+}
+.partner__why b{
+  display:block;
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:600;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+  margin-bottom:7px;
+}
+.partner__meta{
+  margin:var(--s3) 0 0;
+  padding-top:var(--s2);
+  border-top:1px solid var(--line);
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.05em;
+  color:var(--paper-28);
+  line-height:1.8;
+}
+.partner__meta a{ color:var(--paper-42); text-decoration:underline; text-underline-offset:3px; }
+@media (hover:hover){ .partner__meta a:hover{ color:var(--signal); } }
+
+.rotation{
+  margin-top:clamp(18px, 2.4vw, 26px);
+  padding:clamp(20px, 2.6vw, 28px);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  background:var(--ink-050);
+  font-size:15px;
+  line-height:1.72;
+  color:var(--paper-60);
+}
+.rotation strong{ color:var(--paper); font-weight:650; }
+
+/* ============================================================
+   SUPPORT
+   ============================================================ */
+
+.support{
+  position:relative;
+  padding:clamp(28px, 4.4vw, 52px);
+  border:1px solid var(--signal-32);
+  border-radius:var(--r-lg);
+  background:
+    radial-gradient(120% 130% at 0% 0%, var(--signal-08), rgba(212,245,81,0) 62%),
+    var(--ink-050);
+  overflow:hidden;
+}
+.support__title{
+  margin:var(--s3) 0 0;
+  font-size:clamp(28px, 4.6vw, 46px);
+  font-weight:800;
+  line-height:1.02;
+  letter-spacing:-.042em;
+  color:var(--paper);
+  max-width:18ch;
+}
+.support__copy{
+  margin:var(--s3) 0 0;
+  max-width:64ch;
+  font-size:clamp(16px, 1.9vw, 18px);
+  line-height:1.72;
+  color:var(--paper-60);
+}
+.support__copy strong{ color:var(--paper); font-weight:650; }
+
+.support__cta{
+  margin-top:clamp(28px, 3.6vw, 40px);
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+@media (min-width:620px){
+  .support__cta{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .support__cta .btn--line{ grid-column:1 / -1; }
+}
+@media (min-width:900px){
+  .support__cta{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .support__cta .btn--line{ grid-column:auto; }
+}
+
+.allocation{
+  margin-top:clamp(30px, 4vw, 44px);
+  padding-top:clamp(24px, 3vw, 32px);
+  border-top:1px solid var(--line);
+}
+.alloc__bar{
+  display:flex;
+  height:8px;
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:var(--s3);
+  background:var(--ink-200);
+}
+.alloc__seg{ height:100%; }
+.alloc__seg--a{ width:25%; background:var(--signal); }
+.alloc__seg--b{ width:25%; background:var(--signal-lift); opacity:.62; }
+.alloc__seg--c{ width:50%; background:var(--paper-28); }
+
+.alloc__list{
+  margin:0; padding:0;
+  list-style:none;
+  display:grid;
+  gap:14px;
+  grid-template-columns:1fr;
+}
+@media (min-width:700px){ .alloc__list{ grid-template-columns:repeat(3, 1fr); gap:24px; } }
+.alloc__list li{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  font-size:14px;
+  line-height:1.6;
+  color:var(--paper-60);
+}
+.alloc__pct{
+  flex:0 0 auto;
+  min-width:46px;
+  font-size:19px;
+  font-weight:800;
+  letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+  color:var(--paper);
+}
+.alloc__list li:nth-child(1) .alloc__pct,
+.alloc__list li:nth-child(2) .alloc__pct{ color:var(--signal); }
+.alloc__list strong{ color:var(--paper); font-weight:650; }
+
+.fineprint{
+  margin:clamp(24px, 3vw, 32px) 0 0;
+  padding-top:var(--s3);
+  border-top:1px solid var(--line);
+  font-size:13px;
+  line-height:1.75;
+  color:var(--paper-42);
+  max-width:76ch;
+}
+
+/* ============================================================
+   INVOLVE
+   ============================================================ */
+
+.involve{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:clamp(14px, 1.6vw, 20px);
+}
+@media (min-width:760px){ .involve{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
+
+.involve__card{
+  display:flex;
+  flex-direction:column;
+  padding:clamp(24px, 3vw, 34px);
+  background:var(--ink-100);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  transition:border-color .2s ease;
+}
+@media (hover:hover){ .involve__card:hover{ border-color:var(--line-hard); } }
+.involve__h{
+  margin:var(--s2) 0 12px;
+  font-size:clamp(21px, 2.6vw, 26px);
+  font-weight:750;
+  letter-spacing:-.03em;
+  line-height:1.15;
+  color:var(--paper);
+}
+.involve__p{
+  margin:0 0 var(--s4);
+  font-size:15px;
+  line-height:1.7;
+  color:var(--paper-60);
+  flex:1;
+}
+.involve__card .btn{ width:auto; align-self:flex-start; }
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+
+.scrim{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  display:none;
+  padding:calc(16px + var(--safe-t)) 14px calc(16px + var(--safe-b));
+  background:rgba(6,6,8,.78);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+.scrim.is-open{ display:flex; align-items:flex-start; justify-content:center; }
+@media (min-width:700px){ .scrim.is-open{ align-items:center; padding:32px; } }
+
+.dialog{
+  position:relative;
+  width:100%;
+  max-width:820px;
+  margin:auto;
+  background:var(--ink-050);
+  border:1px solid var(--line-hard);
+  border-radius:var(--r-lg);
+  box-shadow:0 40px 100px -30px rgba(0,0,0,.9);
+  animation:dialog-in .2s cubic-bezier(.2,.7,.3,1);
+  overflow:hidden;
+}
+@keyframes dialog-in{
+  from{ opacity:0; transform:translateY(14px) scale(.99); }
+  to{ opacity:1; transform:none; }
+}
+@media (prefers-reduced-motion:reduce){ .dialog{ animation:none; } }
+
+.dialog__bar{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:16px clamp(20px, 3vw, 30px);
+  background:rgba(17,17,20,.92);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.dialog__bar h2{
+  margin:0;
+  font-size:16px;
+  font-weight:750;
+  letter-spacing:-.02em;
+  color:var(--paper);
+}
+.dialog__x{
+  flex:0 0 auto;
+  width:38px; height:38px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid var(--line-hard);
+  border-radius:999px;
+  background:transparent;
+  color:var(--paper-60);
+  font-size:15px;
+  line-height:1;
+  cursor:pointer;
+  transition:background .16s ease, color .16s ease, border-color .16s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+@media (hover:hover){ .dialog__x:hover{ background:var(--signal); border-color:var(--signal); color:#0B0B0D; } }
+
+.dialog__body{ padding:clamp(24px, 3.4vw, 36px); }
+
+.callout{
+  margin:0 0 clamp(24px, 3vw, 32px);
+  padding:18px 20px;
+  border:1px solid var(--signal-32);
+  border-radius:var(--r-md);
+  background:var(--signal-08);
+  font-size:15px;
+  line-height:1.72;
+  color:var(--paper-80);
+}
+.callout strong{ color:var(--signal); font-weight:700; }
+
+/* Ledger table */
+.tablewrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+}
+table.ledger{
+  width:100%;
+  min-width:820px;
+  border-collapse:collapse;
+  font-size:13.5px;
+}
+table.ledger caption{
+  caption-side:top;
+  text-align:left;
+  padding:14px 18px;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+  border-bottom:1px solid var(--line);
+}
+table.ledger th,
+table.ledger td{
+  padding:15px 18px;
+  text-align:left;
+  border-bottom:1px solid var(--line-soft);
+  white-space:nowrap;
+}
+table.ledger thead th{
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+  background:var(--ink-100);
+  border-bottom:1px solid var(--line);
+}
+table.ledger tbody tr:last-child td{ border-bottom:0; }
+table.ledger td{ color:var(--paper-60); font-variant-numeric:tabular-nums; }
+table.ledger td.period{ color:var(--paper); font-weight:650; }
+
+.chip{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:5px 10px;
+  border-radius:999px;
+  border:1px solid var(--signal-32);
+  background:var(--signal-16);
+  color:var(--paper);
+}
+.chip--done{
+  border-color:var(--line-hard);
+  background:transparent;
+  color:var(--paper-42);
+}
+
+.notes{
+  margin-top:clamp(22px, 3vw, 30px);
+  display:grid;
+  gap:12px;
+  font-size:13.5px;
+  line-height:1.75;
+  color:var(--paper-42);
+}
+.notes p{
+  margin:0;
+  padding-left:18px;
+  position:relative;
+}
+.notes p::before{
+  content:"";
+  position:absolute;
+  left:0; top:.62em;
+  width:7px; height:1px;
+  background:var(--signal);
+}
+
+.dialog__close{ margin-top:clamp(26px, 3.4vw, 34px); }
+.dialog__close .btn{ width:auto; }
+
+/* About prose */
+.prose__block + .prose__block{
+  margin-top:clamp(28px, 3.6vw, 38px);
+  padding-top:clamp(28px, 3.6vw, 38px);
+  border-top:1px solid var(--line);
+}
+.prose__h{
+  margin:0 0 14px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--signal);
+}
+.prose__p{
+  margin:0;
+  font-size:16px;
+  line-height:1.78;
+  color:var(--paper-60);
+}
+.prose__p + .prose__p{ margin-top:14px; }
+.prose__p strong{ color:var(--paper); font-weight:650; }
+.prose__p em{ color:var(--signal); font-style:normal; }
+.prose__lead{
+  font-size:clamp(18px, 2.2vw, 22px);
+  line-height:1.6;
+  letter-spacing:-.018em;
+  color:var(--paper);
+  font-weight:600;
+}
+.signoff{
+  margin-top:18px;
+  padding:22px 24px;
+  border:1px solid var(--line-hard);
+  border-radius:var(--r-md);
+  background:var(--ink-100);
+  font-size:16px;
+  line-height:1.75;
+  color:var(--paper-80);
+}
+.signoff__name{
+  display:block;
+  margin-top:14px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--signal);
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+
+.toast{
+  position:fixed;
+  z-index:190;
+  left:50%;
+  bottom:calc(20px + var(--safe-b));
+  transform:translateX(-50%);
+  width:calc(100% - 28px);
+  max-width:520px;
+  display:none;
+  padding:16px 16px 16px 20px;
+  background:var(--paper);
+  color:#0B0B0D;
+  border-radius:var(--r-md);
+  box-shadow:0 26px 60px -20px rgba(0,0,0,.85);
+}
+.toast.is-visible{ display:flex; animation:toast-in .28s cubic-bezier(.2,.7,.3,1); }
+@keyframes toast-in{
+  from{ opacity:0; transform:translate(-50%, 18px); }
+  to{ opacity:1; transform:translate(-50%, 0); }
+}
+@media (prefers-reduced-motion:reduce){ .toast.is-visible{ animation:none; } }
+.toast__body{ flex:1; display:flex; align-items:flex-start; gap:14px; }
+.toast__mark{
+  flex:0 0 auto;
+  width:28px; height:28px;
+  border-radius:8px;
+  background:var(--signal);
+  display:inline-flex; align-items:center; justify-content:center;
+  color:#0B0B0D;              /* ink on acid — white would vanish here */
+  font-size:14px;
+  font-weight:700;
+  line-height:1;
+}
+.toast__text{
+  margin:0;
+  font-size:14px;
+  line-height:1.55;
+  font-weight:600;
+  letter-spacing:-.01em;
+}
+.toast__text span{
+  display:block;
+  margin-top:3px;
+  font-weight:500;
+  color:rgba(11,11,13,.62);
+  font-size:13px;
+}
+.toast__x{
+  flex:0 0 auto;
+  width:36px; height:36px;
+  margin:-4px -4px 0 8px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:rgba(11,11,13,.5);
+  font-size:15px;
+  cursor:pointer;
+  transition:background .16s ease, color .16s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+@media (hover:hover){ .toast__x:hover{ background:rgba(11,11,13,.09); color:#0B0B0D; } }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.site-footer{
+  position:relative;
+  z-index:2;
+  border-top:1px solid var(--line);
+  background:var(--ink-050);
+  padding-top:clamp(48px, 6vw, 76px);
+  padding-bottom:clamp(32px, 4vw, 44px);
+}
+.footer__grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:clamp(32px, 4vw, 48px);
+  padding-bottom:clamp(36px, 4.6vw, 56px);
+}
+@media (min-width:760px){ .footer__grid{ grid-template-columns:2fr 1fr 1fr 1fr; } }
+
+.footer__blurb{
+  margin:16px 0 0;
+  font-size:14.5px;
+  line-height:1.7;
+  color:var(--paper-42);
+  max-width:34ch;
+}
+.footer__h{
+  margin:0 0 16px;
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--paper-28);
+}
+.footer__list{
+  margin:0; padding:0;
+  list-style:none;
+  display:grid;
+  gap:11px;
+}
+.footer__list a,
+.footer__list button{
+  appearance:none;
+  border:0;
+  background:none;
+  padding:0;
+  font-family:var(--sans);
+  font-size:14.5px;
+  color:var(--paper-60);
+  text-decoration:none;
+  cursor:pointer;
+  text-align:left;
+  transition:color .16s ease;
+}
+@media (hover:hover){ .footer__list a:hover, .footer__list button:hover{ color:var(--signal); } }
+
+.footer__base{
+  padding-top:clamp(24px, 3vw, 32px);
+  border-top:1px solid var(--line);
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px 28px;
+  align-items:baseline;
+  justify-content:space-between;
+}
+.footer__domain{
+  margin:0;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--paper-42);
+}
+.footer__domain b{ color:var(--paper); font-weight:600; }
+.footer__legal{
+  margin:0;
+  font-size:12.5px;
+  line-height:1.75;
+  color:var(--paper-28);
+  max-width:72ch;
+}
+</style>
+</head>
+<body id="top">
+
+<a class="skip" href="#games">Skip to games</a>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ==========================================================
+     CYCLE BAR
+     ========================================================== -->
+<div class="cyclebar" role="region" aria-label="Current relief cycle">
+  <div class="cyclebar__in">
+    <span class="cyclebar__tag">Cycle 01</span>
+    <span>Now funding <b>Western PA storm relief</b> &amp; <b>World Central Kitchen</b> &mdash; 50% of every tip, after fees</span>
+  </div>
+</div>
+
+<!-- ==========================================================
+     NAV
+     ========================================================== -->
+<nav class="nav" aria-label="Primary">
+  <div class="wrap nav__in">
+    <a class="brand" href="#top" aria-label="Resistance Arcade, home">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <rect width="64" height="64" rx="14" fill="#D4F551"/>
+        <circle cx="32" cy="24" r="9" fill="#0B0B0D"/>
+        <path d="M26 34h12l4 12H22z" fill="#0B0B0D"/>
+      </svg>
+      <span class="brand__type">
+        <b>Resistance Arcade</b>
+        <span>Play free. Fund relief.</span>
+      </span>
+    </a>
+
+    <div class="nav__links">
+      <a class="navlink" href="#games">Games</a>
+      <a class="navlink" href="#impact">Impact</a>
+      <button class="navlink" type="button" data-about-open>About</button>
+      <button class="navlink" type="button" data-ledger-open>Ledger</button>
+      <a class="navlink navlink--cta" href="#support">Support</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ==========================================================
+     HERO
+     ========================================================== -->
+<header class="hero">
+  <div class="wrap">
+    <p class="hero__eyebrow eyebrow"><span class="tick" aria-hidden="true"></span>Free play, always &mdash; Cycle 01 open</p>
+
+    <h1 class="hero__title">
+      <span class="the">The</span>
+      Resistance
+      <span class="l2">Arcade</span>
+    </h1>
+
+    <p class="hero__lede">
+      Satirical browser games built by one teacher in Western Pennsylvania.
+      <strong>Every cabinet is free, forever.</strong> Half of every tip, after payment fees, goes to relief
+      organizations chosen each cycle &mdash; and the books are public.
+    </p>
+
+    <div class="hero__cta">
+      <a class="btn btn--paper" href="#games"><span class="ico" aria-hidden="true">&#9654;</span> Play the games</a>
+      <a class="btn btn--signal" href="#support">Fund relief &mdash; $5</a>
+      <button class="btn btn--line" type="button" data-ledger-open>See the books</button>
+    </div>
+
+    <ul class="hero__badges">
+      <li>No paywalls</li>
+      <li>No ads</li>
+      <li>No trackers</li>
+      <li>No accounts</li>
+      <li>Installable</li>
+    </ul>
+  </div>
+</header>
+
+<!-- ==========================================================
+     STAT STRIP
+     ========================================================== -->
+<section class="stats" aria-label="Impact readout">
+  <div class="wrap">
+    <div class="stats__grid">
+      <div class="stat stat--signal">
+        <span class="stat__label">Total relief pool</span>
+        <span class="stat__value" id="impact-raised">&mdash;</span>
+        <span class="stat__sub" id="impact-raised-sub"></span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">To relief partners</span>
+        <span class="stat__value" id="impact-relief">&mdash;</span>
+        <span class="stat__sub" id="impact-relief-sub"></span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Next reconciliation</span>
+        <span class="stat__value" id="impact-audit">&mdash;</span>
+        <span class="stat__sub">Audited on the 7th, every month</span>
+      </div>
+    </div>
+    <p class="stats__foot" id="impact-foot"></p>
+  </div>
+</section>
+
+<main>
+  <!-- ========================================================
+       GAMES
+       ======================================================== -->
+  <section class="band band--flush" id="games" aria-labelledby="games-title">
+    <div class="wrap">
+      <div class="sechead">
+        <span class="sechead__idx">01</span>
+        <h2 class="sechead__title" id="games-title">The floor</h2>
+        <span class="sechead__rule" aria-hidden="true"></span>
+        <span class="sechead__meta">4 cabinets</span>
+      </div>
+      <p class="seclede">
+        Every cabinet runs free in your browser, on any device, with nothing to install and no account to make.
+        Offline editions are a standalone copy you keep &mdash; a thank-you for a tip, never a requirement.
+      </p>
+
+      <div class="games">
+
+        <article class="game">
+          <div class="game__top">
+            <span class="game__idx">01</span>
+            <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+          </div>
+          <h3 class="game__title">Portly Flapper</h3>
+          <p class="game__desc">Dodge brown sectionals, raw milk jugs, and golden arches as JD, Bobby, and Diaper Don.</p>
+          <div class="game__actions">
+            <a class="btn btn--paper" href="./flapper/index.html">
+              <span class="ico" aria-hidden="true">&#9654;</span> Play free<span class="sr-only">: Portly Flapper</span>
+            </a>
+            <a class="btn btn--quiet"
+               href="https://buy.stripe.com/your_flapper_offline_link"
+               target="_blank" rel="noopener noreferrer">
+              <span class="ico" aria-hidden="true">&#8681;</span> Offline copy &mdash; $5+<span class="sr-only">: Portly Flapper</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="game">
+          <div class="game__top">
+            <span class="game__idx">02</span>
+            <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+          </div>
+          <h3 class="game__title">Klickashklic</h3>
+          <p class="game__desc">Kash Patel locks the FBI doors. Click furiously to redact flight manifests and protect the boss before subpoenas hit.</p>
+          <div class="game__actions">
+            <a class="btn btn--paper" href="./klickashklic/index.html">
+              <span class="ico" aria-hidden="true">&#9654;</span> Play free<span class="sr-only">: Klickashklic</span>
+            </a>
+            <a class="btn btn--quiet"
+               href="https://buy.stripe.com/your_klickashklic_offline_link"
+               target="_blank" rel="noopener noreferrer">
+              <span class="ico" aria-hidden="true">&#8681;</span> Offline copy &mdash; $5+<span class="sr-only">: Klickashklic</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="game">
+          <div class="game__top">
+            <span class="game__idx">03</span>
+            <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+          </div>
+          <h3 class="game__title">Bunker Muncher</h3>
+          <p class="game__desc">Navigate the gold ballroom bunker, chomp fast food, and dodge Jeffrey and Mohammed under Executive Immunity.</p>
+          <div class="game__actions">
+            <a class="btn btn--paper" href="./bunker/index.html">
+              <span class="ico" aria-hidden="true">&#9654;</span> Play free<span class="sr-only">: Bunker Muncher</span>
+            </a>
+            <a class="btn btn--quiet"
+               href="https://buy.stripe.com/your_bunker_offline_link"
+               target="_blank" rel="noopener noreferrer">
+              <span class="ico" aria-hidden="true">&#8681;</span> Offline copy &mdash; $5+<span class="sr-only">: Bunker Muncher</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="game game--soon">
+          <div class="game__top">
+            <span class="game__idx">04</span>
+            <span class="pill pill--soon">In development</span>
+          </div>
+          <h3 class="game__title">The Tylenol Trail</h3>
+          <p class="game__desc">Haul a covered Conestoga wagon behind a Cybertruck with Bobby to seize Big Pharma's acetaminophen reserves.</p>
+          <div class="game__actions">
+            <button class="btn btn--line" type="button" disabled aria-disabled="true">Not yet playable</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       IMPACT
+       ======================================================== -->
+  <section class="band" id="impact" aria-labelledby="impact-title">
+    <div class="wrap">
+      <div class="sechead">
+        <span class="sechead__idx">02</span>
+        <h2 class="sechead__title" id="impact-title">Where it goes</h2>
+        <span class="sechead__rule" aria-hidden="true"></span>
+        <span class="sechead__meta">Cycle 01</span>
+      </div>
+      <p class="seclede">
+        Two partners this cycle: one local, one national. Numbers update at each monthly reconciliation, not in
+        real time &mdash; a tip made today appears above once it has settled and cleared.
+      </p>
+
+      <div class="partners">
+
+        <article class="partner">
+          <div class="partner__head">
+            <span class="partner__mark" aria-hidden="true">WCFB</span>
+            <div>
+              <span class="partner__scope">Local &mdash; Western PA</span>
+              <h3 class="partner__name">Westmoreland County Food Bank</h3>
+            </div>
+          </div>
+          <p class="partner__body">
+            The central hunger-relief hub for Westmoreland County, distributing food through a network of local
+            pantries and drop-off sites. A member of Feeding America and Hunger-Free Pennsylvania, it uses bulk
+            purchasing power to stretch a donated dollar far past what a retail grocery run could do.
+          </p>
+          <div class="partner__why">
+            <b>Why this one</b>
+            These are my neighbors, and some of them are my students. Hunger in a county like this is quiet and
+            constant &mdash; it never makes the news, and a kid who hasn't eaten can't learn. Storm damage just
+            turns an ordinary bad month into an impossible one.
+          </div>
+          <p class="partner__meta">
+            501(c)(3) &middot; EIN 25&#8209;1422682 &middot;
+            <a href="https://westmorelandfoodbank.org/" target="_blank" rel="noopener noreferrer">westmorelandfoodbank.org</a>
+          </p>
+        </article>
+
+        <article class="partner">
+          <div class="partner__head">
+            <span class="partner__mark" aria-hidden="true">WCK</span>
+            <div>
+              <span class="partner__scope">National &amp; global</span>
+              <h3 class="partner__name">World Central Kitchen</h3>
+            </div>
+          </div>
+          <p class="partner__body">
+            A disaster-response organization that stands up field kitchens and serves hot meals in the immediate
+            aftermath of hurricanes, fires, floods, and conflict &mdash; usually working alongside local
+            restaurants and cooks who are already on the ground.
+          </p>
+          <div class="partner__why">
+            <b>Why this one</b>
+            Because speed is the whole point. When a disaster hits, WCK is generally cooking before the formal
+            aid pipeline finishes mobilizing, and a hot meal on day two is worth more than a pallet of supplies
+            on day ten.
+          </div>
+          <p class="partner__meta">
+            501(c)(3) &middot;
+            <a href="https://wck.org/" target="_blank" rel="noopener noreferrer">wck.org</a>
+          </p>
+        </article>
+
+      </div>
+
+      <p class="rotation">
+        <strong>Partners rotate.</strong> This pair is Cycle 01. The goal is to reach as many lives as possible,
+        so beneficiaries change as needs change &mdash; with a standing focus on <strong>disaster-affected
+        areas</strong>, <strong>people detained by ICE and the families they leave behind</strong>, and
+        <strong>anyone else in genuine need</strong>. Closed cycles stay in the public ledger permanently, so
+        nothing disappears when the marquee changes.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       SUPPORT
+       ======================================================== -->
+  <section class="band" id="support" aria-labelledby="support-title">
+    <div class="wrap">
+      <div class="sechead">
+        <span class="sechead__idx">03</span>
+        <h2 class="sechead__title">Support</h2>
+        <span class="sechead__rule" aria-hidden="true"></span>
+        <span class="sechead__meta">50 / 50</span>
+      </div>
+
+      <div class="support">
+        <p class="eyebrow"><span class="tick" aria-hidden="true"></span>Cycle 01 active</p>
+
+        <h3 class="support__title" id="support-title">Tips split down the middle.</h3>
+
+        <p class="support__copy">
+          <strong>50% of net proceeds, after Stripe's processing fees</strong>, is split evenly between the two
+          relief partners above. The other 50% keeps the servers on, the domain renewed, and the next cabinet in
+          development. That is the entire model &mdash; no tiers, no perks that change the games, nothing behind
+          a wall.
+        </p>
+
+        <div class="support__cta">
+          <!-- TEST MODE Payment Link — replace with the live $5 link before launch -->
+          <a class="btn btn--signal"
+             href="https://buy.stripe.com/test_14A8wI1wdaBe0eK3UL0Ba00"
+             target="_blank" rel="noopener noreferrer">Tip $5 once</a>
+          <a class="btn btn--paper"
+             href="https://buy.stripe.com/your_recurring_link"
+             target="_blank" rel="noopener noreferrer">
+            <span class="ico" aria-hidden="true">&#8635;</span> Sustain &mdash; $5/mo
+          </a>
+          <button class="btn btn--line" type="button" data-ledger-open>Inspect the ledger</button>
+        </div>
+
+        <div class="allocation">
+          <div class="alloc__bar" role="img" aria-label="Allocation: 25 percent Westmoreland County Food Bank, 25 percent World Central Kitchen, 50 percent hosting and development">
+            <span class="alloc__seg alloc__seg--a"></span>
+            <span class="alloc__seg alloc__seg--b"></span>
+            <span class="alloc__seg alloc__seg--c"></span>
+          </div>
+          <ul class="alloc__list">
+            <li><span class="alloc__pct">25%</span> <span><strong>Westmoreland County Food Bank</strong> &mdash; local student and family relief.</span></li>
+            <li><span class="alloc__pct">25%</span> <span><strong>World Central Kitchen</strong> &mdash; frontline disaster meals.</span></li>
+            <li><span class="alloc__pct">50%</span> <span>Hosting, the domain, and building the next cabinet.</span></li>
+          </ul>
+        </div>
+
+        <p class="fineprint">
+          Tips are voluntary contributions to an independent creator, not tax-deductible charitable donations.
+          If you want a deductible receipt, give to either organization directly &mdash; their links are on the
+          cards above, and it helps them exactly as much.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================
+       INVOLVE
+       ======================================================== -->
+  <section class="band" id="involve" aria-labelledby="involve-title">
+    <div class="wrap">
+      <div class="sechead">
+        <span class="sechead__idx">04</span>
+        <h2 class="sechead__title" id="involve-title">Have a say</h2>
+        <span class="sechead__rule" aria-hidden="true"></span>
+        <span class="sechead__meta">Open floor</span>
+      </div>
+      <p class="seclede">This runs better with other people in it. Two things I would genuinely like from you.</p>
+
+      <div class="involve">
+        <div class="involve__card">
+          <p class="eyebrow"><span class="tick" aria-hidden="true"></span>Nominate</p>
+          <h3 class="involve__h">Name a cause worth funding</h3>
+          <p class="involve__p">
+            Know a group doing real work &mdash; disaster relief, ICE detainee and family support, a local
+            pantry, a mutual aid fund? Send it. Any nominee clears the same bar as the current partners: a
+            registered nonprofit in good standing, with public financials and a clear use of funds.
+          </p>
+          <a class="btn btn--line" href="mailto:hello@resistance-games.com?subject=Cause%20nomination&amp;body=Organization%20name%3A%0AWebsite%3A%0AWhat%20they%20do%3A%0AWhy%20them%3A%0A">
+            Nominate a cause
+          </a>
+        </div>
+
+        <div class="involve__card">
+          <p class="eyebrow"><span class="tick" aria-hidden="true"></span>Pitch</p>
+          <h3 class="involve__h">Tell me what to build next</h3>
+          <p class="involve__p">
+            Got an idea for a game? The bar is low and the door is open &mdash; one good premise in one sentence
+            is plenty. The cabinets that already exist started exactly that way, and the ones people actually
+            want to play are the ones that get built next.
+          </p>
+          <a class="btn btn--line" href="mailto:hello@resistance-games.com?subject=Game%20idea&amp;body=The%20premise%20in%20one%20sentence%3A%0AWho%20you%20play%20as%3A%0AWhat%20you%27re%20dodging%3A%0A">
+            Pitch a cabinet
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ==========================================================
+     FOOTER
+     ========================================================== -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="#top">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <rect width="64" height="64" rx="14" fill="#D4F551"/>
+            <circle cx="32" cy="24" r="9" fill="#0B0B0D"/>
+            <path d="M26 34h12l4 12H22z" fill="#0B0B0D"/>
+          </svg>
+          <span class="brand__type">
+            <b>Resistance Arcade</b>
+            <span>Play free. Fund relief.</span>
+          </span>
+        </a>
+        <p class="footer__blurb">
+          Free satirical games built by an independent teacher in Western Pennsylvania. Half of every tip goes
+          to relief, and the books are open.
+        </p>
+      </div>
+
+      <div>
+        <p class="footer__h">Arcade</p>
+        <ul class="footer__list">
+          <li><a href="#games">All cabinets</a></li>
+          <li><a href="./flapper/index.html">Portly Flapper</a></li>
+          <li><a href="./klickashklic/index.html">Klickashklic</a></li>
+          <li><a href="./bunker/index.html">Bunker Muncher</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer__h">The books</p>
+        <ul class="footer__list">
+          <li><button type="button" data-about-open>About &amp; mission</button></li>
+          <li><button type="button" data-ledger-open>Public ledger</button></li>
+          <li><a href="#impact">Relief partners</a></li>
+          <li><a href="#support">Support</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer__h">Get in touch</p>
+        <ul class="footer__list">
+          <li><a href="mailto:hello@resistance-games.com">hello@resistance-games.com</a></li>
+          <li><a href="mailto:hello@resistance-games.com?subject=Cause%20nomination">Nominate a cause</a></li>
+          <li><a href="mailto:hello@resistance-games.com?subject=Game%20idea">Pitch a game</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__base">
+      <p class="footer__domain"><b>resistance-games.com</b> &nbsp;&mdash;&nbsp; Open-source engine</p>
+      <p class="footer__legal">
+        Satire and parody. All characters are fictionalized commentary on public figures. Tips are voluntary
+        contributions to an independent creator and are not tax-deductible. Relief partners are named because
+        funds are directed to them; naming does not imply their endorsement or sponsorship of this site.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- ==========================================================
+     LEDGER DIALOG
+     ========================================================== -->
+<div class="scrim" id="ledger" role="dialog" aria-modal="true" aria-labelledby="ledger-title" hidden>
+  <div class="dialog" role="document">
+    <div class="dialog__bar">
+      <h2 id="ledger-title">Public ledger</h2>
+      <button class="dialog__x" type="button" data-modal-close aria-label="Close public ledger">&#10005;</button>
+    </div>
+
+    <div class="dialog__body">
+      <p class="callout">
+        <strong>Radical transparency.</strong> Tips are reconciled on the 7th of each month, covering the month
+        prior, once payments have settled. The 50% relief share is split evenly &mdash; 25% to the Westmoreland
+        County Food Bank, 25% to World Central Kitchen. A receipt from each organization is posted here as it
+        clears.
+      </p>
+
+      <div class="tablewrap">
+        <table class="ledger">
+          <caption>Tip reconciliation &mdash; all figures in USD</caption>
+          <thead>
+            <tr>
+              <th scope="col">Period</th>
+              <th scope="col">Gross tips</th>
+              <th scope="col">Stripe fees</th>
+              <th scope="col">Westmoreland FB (25%)</th>
+              <th scope="col">World Central Kitchen (25%)</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="period">September 2026</td>
+              <td>$0.00</td>
+              <td>$0.00</td>
+              <td>Pending</td>
+              <td>Pending</td>
+              <td><span class="chip">Reconciles Oct 7</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="notes">
+        <p>Stripe fees are their published rate (2.9% + $0.30 per transaction). The relief share is calculated on net proceeds after those fees, then halved between the two partners.</p>
+        <p>Two receipts per period, one per organization, are posted as scans once each transfer clears.</p>
+        <p>Partners rotate between cycles. Closed cycles stay in this table permanently &mdash; nothing is removed once listed.</p>
+        <p>Question a line item? Write to hello@resistance-games.com and it gets answered in public.</p>
+      </div>
+
+      <div class="dialog__close">
+        <button class="btn btn--line" type="button" data-modal-close>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================
+     ABOUT DIALOG
+     ========================================================== -->
+<div class="scrim" id="about-modal" role="dialog" aria-modal="true" aria-labelledby="about-title" hidden>
+  <div class="dialog" role="document">
+    <div class="dialog__bar">
+      <h2 id="about-title">About &amp; mission</h2>
+      <button class="dialog__x" type="button" data-modal-close aria-label="Close about dialog">&#10005;</button>
+    </div>
+
+    <div class="dialog__body">
+      <div class="prose__block">
+        <p class="prose__h">Who built this</p>
+        <p class="prose__p prose__lead">
+          I'm a teacher, a father, and a creator. I work every day, and I still struggle.
+        </p>
+        <p class="prose__p">
+          I know a lot of people are in exactly the same place &mdash; doing everything right and still coming up
+          short at the end of the month. That's why I built the Resistance Arcade: so I can help my own family
+          while helping as many other people as I possibly can. Both at once, out in the open, with the math
+          published.
+        </p>
+      </div>
+
+      <div class="prose__block">
+        <p class="prose__h">The mission</p>
+        <p class="prose__p">
+          Free, <strong>open-source</strong> satirical games that anyone can play, on any device, with
+          <strong>no paywalls, no corporate trackers, and no advertising</strong>. No account, no email capture,
+          no analytics pixel following you around. Every cabinet loads and runs for free, forever. Tipping is
+          optional and buys you nothing the next player doesn't already have.
+        </p>
+      </div>
+
+      <div class="prose__block">
+        <p class="prose__h">Where the money goes</p>
+        <p class="prose__p">
+          <strong>50% of net proceeds, after Stripe fees</strong>, goes to relief. Cycle 01 splits it between one
+          local organization and one national one: 25% to the <strong>Westmoreland County Food Bank</strong>,
+          feeding local school kids and restocking pantries for families hit by storm damage; 25% to
+          <strong>World Central Kitchen</strong>, putting hot meals on the ground during disasters. The remaining
+          50% covers hosting, the domain, and building the next cabinet.
+        </p>
+        <p class="prose__p">
+          Every transfer is logged in the <em>public ledger</em>, reconciled on the 7th of each month, with a
+          receipt from each organization posted as it clears.
+        </p>
+      </div>
+
+      <div class="prose__block">
+        <p class="prose__h">Partners will change</p>
+        <p class="prose__p">
+          The goal is to reach as many lives as I can, so the organizations rotate as needs shift. The standing
+          focus is <strong>disaster-affected areas</strong>, <strong>people detained by ICE and the families they
+          leave behind</strong>, and <strong>anyone else in real need</strong>. If you know a group doing that
+          work, <em>nominate them</em> &mdash; the only requirement is that they clear the same bar as the
+          current partners. Game ideas are just as welcome.
+        </p>
+      </div>
+
+      <div class="prose__block">
+        <p class="prose__h">Offline preservation</p>
+        <p class="prose__p">
+          Tipping for an <strong>offline edition</strong> gets you a standalone, <strong>DRM-free copy</strong> of
+          that cabinet &mdash; the whole game in a folder you own, playable with no internet connection, no
+          launcher, and nothing phoning home. It keeps working if this site ever goes dark, and the tip funds the
+          same relief split as any other contribution.
+        </p>
+      </div>
+
+      <div class="prose__block">
+        <p class="prose__h">Thank you</p>
+        <div class="signoff">
+          A heartfelt thank you to anyone who took the time to read this. An even bigger one to anyone who
+          chooses to give. You are the entire reason this works.
+          <span class="signoff__name">&mdash; Mike, Western Pennsylvania</span>
+        </div>
+      </div>
+
+      <div class="notes">
+        <p>Satire and parody. All characters are fictionalized commentary on public figures.</p>
+        <p>Tips are voluntary contributions to an independent creator, not tax-deductible donations.</p>
+      </div>
+
+      <div class="dialog__close">
+        <button class="btn btn--line" type="button" data-modal-close>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================
+     CONFIRMATION TOAST
+     ========================================================== -->
+<div id="thankyou-toast" class="toast" role="alert">
+  <div class="toast__body">
+    <span class="toast__mark" aria-hidden="true">&#10003;</span>
+    <p class="toast__text">
+      Thank you for funding emergency meals.
+      <span>Your tip is logged and reconciles on the 7th.</span>
+    </p>
+  </div>
+  <button class="toast__x" type="button" data-thankyou-dismiss aria-label="Dismiss confirmation">&#10005;</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ==========================================================
+     0. IMPACT CONFIG — the only place you edit the numbers.
+
+     Update `totalRaised` after each monthly reconciliation and
+     keep it at the real figure. This strip is the site's
+     credibility; an inflated number is the fastest way to lose it.
+     ========================================================== */
+
+  var ARCADE_IMPACT_CONFIG = {
+
+    /* Gross dollars taken in across all tips and sustainers. */
+    totalRaised: 0,
+
+    /* Share of net proceeds routed to relief (the rest is hosting/dev). */
+    reliefShare: 0.5,
+
+    /* Stripe's published rate, used only for the net estimate below. */
+    stripePercent: 0.029,
+    stripeFlatFee: 0.30,
+
+    /* Roughly how many separate tips so far — used to estimate the
+       per-transaction flat fee. Leave at 0 to skip fee estimating. */
+    tipCount: 0,
+
+    /* Next reconciliation + transfer date, exactly as displayed. */
+    nextAudit: 'Oct 7',
+    nextAuditFull: 'October 7, 2026',
+
+    /* Cycle label shown in the readout subtitles. */
+    cycle: 'Cycle 01',
+
+    /* This cycle's partners. Each takes an equal share of the relief pool.
+       `mealsPerDollar` is that organization's own published purchasing
+       power; set it to null and the partner is left out of the estimate.
+         - Feeding America network food banks commonly cite ~10 meals/$1.
+           Confirm Westmoreland's own current figure before publishing it.
+         - WCK field meals run roughly $2 each, so ~0.5 meals/$1. */
+    partners: [
+      { name: 'Westmoreland County Food Bank', short: 'WCFB', mealsPerDollar: 10 },
+      { name: 'World Central Kitchen',         short: 'WCK',  mealsPerDollar: 0.5 }
+    ]
+  };
+
+  window.ARCADE_IMPACT_CONFIG = ARCADE_IMPACT_CONFIG;
+
+  /* ==========================================================
+     1. IMPACT READOUT
+     Pure presentation. No network, no storage, no tracking.
+     ========================================================== */
+
+  function commas(v) {
+    return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  function money(n)      { return '$' + commas(n.toFixed(2)); }
+  function moneyRound(n) { return '$' + commas(Math.round(n)); }
+
+  function renderImpact() {
+    var cfg      = ARCADE_IMPACT_CONFIG;
+    var gross    = Number(cfg.totalRaised) || 0;
+    var share    = Number(cfg.reliefShare) || 0;
+    var partners = cfg.partners || [];
+
+    /* Estimated Stripe fees, then the relief pool from what is left. */
+    var fees = gross > 0
+      ? (gross * (Number(cfg.stripePercent) || 0)) + ((Number(cfg.tipCount) || 0) * (Number(cfg.stripeFlatFee) || 0))
+      : 0;
+    var net        = Math.max(gross - fees, 0);
+    var relief     = net * share;
+    var perPartner = partners.length ? relief / partners.length : 0;
+
+    /* Meals estimate — each partner's own rate against its own share. */
+    var meals = 0, rated = 0;
+    for (var i = 0; i < partners.length; i++) {
+      var rate = partners[i].mealsPerDollar;
+      if (typeof rate === 'number' && rate > 0) {
+        meals += perPartner * rate;
+        rated++;
+      }
+    }
+    meals = Math.floor(meals / 10) * 10;
+
+    var el = {
+      raised:    document.getElementById('impact-raised'),
+      raisedSub: document.getElementById('impact-raised-sub'),
+      relief:    document.getElementById('impact-relief'),
+      reliefSub: document.getElementById('impact-relief-sub'),
+      audit:     document.getElementById('impact-audit'),
+      foot:      document.getElementById('impact-foot')
+    };
+
+    var preLaunch = gross <= 0;
+    var names = [];
+    for (var j = 0; j < partners.length; j++) names.push(partners[j].name);
+
+    if (el.raised)    el.raised.textContent    = moneyRound(gross);
+    if (el.raisedSub) el.raisedSub.textContent = preLaunch
+      ? cfg.cycle + ' just opened — gross, since launch'
+      : 'Gross, since launch';
+
+    if (el.relief)    el.relief.textContent    = moneyRound(relief);
+    if (el.reliefSub) {
+      if (preLaunch) {
+        el.reliefSub.textContent = 'First transfer posts ' + (cfg.nextAudit || 'soon');
+      } else if (rated > 0) {
+        el.reliefSub.textContent = 'Roughly ' + commas(meals) + ' meals funded (estimate)';
+      } else {
+        el.reliefSub.textContent = 'Split evenly between partners';
+      }
+    }
+
+    if (el.audit) el.audit.textContent = cfg.nextAudit || 'TBD';
+
+    if (el.foot) {
+      el.foot.textContent = preLaunch
+        ? cfg.cycle + ' opened at $0. Every dollar from here is logged, halved, and split between the ' +
+          names.join(' and the ') + '. Nothing appears above until it has actually cleared. Next reconciliation ' +
+          (cfg.nextAuditFull || cfg.nextAudit) + '.'
+        : moneyRound(gross) + ' gross, less ' + money(fees) + ' in estimated Stripe fees, leaves ' +
+          moneyRound(net) + ' net. ' + Math.round(share * 100) + '% of that (' + moneyRound(relief) +
+          ') goes to relief — ' + moneyRound(perPartner) + ' each to the ' + names.join(' and the ') +
+          '. Meal figures are estimates based on each organization’s own published cost per meal.';
+    }
+  }
+
+  renderImpact();
+
+  /* ==========================================================
+     2. DIALOGS — ledger + about
+     One controller drives both: open/close, ESC, backdrop
+     click-dismiss, focus trap, focus restore.
+     ========================================================== */
+
+  var FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+  var activeScrim = null;
+  var lastFocus   = null;
+
+  function openDialog(id) {
+    var scrim = document.getElementById(id);
+    if (!scrim || scrim === activeScrim) return;
+    if (activeScrim) closeDialog();
+
+    lastFocus = document.activeElement;
+    scrim.hidden = false;
+    scrim.classList.add('is-open');
+    document.body.classList.add('is-locked');
+    activeScrim = scrim;
+
+    var dialog = scrim.querySelector('.dialog');
+    var first  = dialog ? dialog.querySelector(FOCUSABLE) : null;
+    if (first) first.focus();
+  }
+
+  function closeDialog() {
+    if (!activeScrim) return;
+    activeScrim.classList.remove('is-open');
+    activeScrim.hidden = true;
+    activeScrim = null;
+    document.body.classList.remove('is-locked');
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  function bindAll(selector, handler) {
+    Array.prototype.forEach.call(document.querySelectorAll(selector), function (el) {
+      el.addEventListener('click', handler);
+    });
+  }
+
+  bindAll('[data-ledger-open]', function () { openDialog('ledger'); });
+  bindAll('[data-about-open]',  function () { openDialog('about-modal'); });
+  bindAll('[data-modal-close]', closeDialog);
+
+  /* Backdrop click-dismiss — only when the scrim itself is hit */
+  Array.prototype.forEach.call(document.querySelectorAll('.scrim'), function (scrim) {
+    scrim.addEventListener('click', function (e) {
+      if (e.target === scrim) closeDialog();
+    });
+  });
+
+  /* ESC to close, plus a focus trap while a dialog is open */
+  document.addEventListener('keydown', function (e) {
+    if (!activeScrim) return;
+
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      e.preventDefault();
+      closeDialog();
+      return;
+    }
+
+    if (e.key === 'Tab') {
+      var dialog = activeScrim.querySelector('.dialog');
+      if (!dialog) return;
+
+      var nodes = dialog.querySelectorAll(FOCUSABLE);
+      if (!nodes.length) return;
+
+      var first = nodes[0];
+      var last  = nodes[nodes.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  /* ==========================================================
+     3. UNRELEASED CABINET FEEDBACK
+     Disabled buttons swallow their own clicks, so the card
+     listens instead and flashes the reason.
+     ========================================================== */
+
+  Array.prototype.forEach.call(document.querySelectorAll('.game--soon'), function (card) {
+    card.addEventListener('click', function () {
+      var btn = card.querySelector('.btn[disabled]');
+      if (!btn || btn.getAttribute('data-busy') === '1') return;
+      var original = btn.textContent;
+      btn.setAttribute('data-busy', '1');
+      btn.textContent = 'Still in development';
+      window.setTimeout(function () {
+        btn.textContent = original;
+        btn.setAttribute('data-busy', '0');
+      }, 1600);
+    });
+  });
+
+  /* ==========================================================
+     4. STRIPE RETURN CONFIRMATION
+     Payment Link success URLs send players back to
+     ?thankyou=true (?tipped=true is accepted too). Show the
+     toast, then scrub the param so a reload does not replay it.
+
+     Note: this parameter is client-side only and proves nothing.
+     It is a courtesy message, never a gate on anything of value.
+     ========================================================== */
+
+  var toast = document.getElementById('thankyou-toast');
+
+  function showToast() { if (toast) toast.classList.add('is-visible'); }
+  function hideToast() { if (toast) toast.classList.remove('is-visible'); }
+
+  (function handleTipReturn() {
+    if (!toast) return;
+
+    var search  = window.location.search || '';
+    var settled = false;
+
+    if (typeof window.URLSearchParams === 'function') {
+      var params = new window.URLSearchParams(search);
+      settled = params.get('thankyou') === 'true' || params.get('tipped') === 'true';
+    } else {
+      settled = /[?&](?:thankyou|tipped)=true(?:&|$)/.test(search);
+    }
+
+    if (!settled) return;
+
+    showToast();
+
+    if (window.history && typeof window.history.replaceState === 'function') {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }());
+
+  bindAll('[data-thankyou-dismiss]', hideToast);
+
+  /* ==========================================================
+     5. SERVICE WORKER REGISTRATION STUB
+     Registers ./sw.js when one has been deployed, so the hub is
+     installable and shells the cabinets offline. Fails silently
+     on file:// and before any worker exists.
+     ========================================================== */
+
+  if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./sw.js', { scope: './' })
+        .then(function (reg) {
+          if (window.console && console.info) {
+            console.info('[Arcade] Service worker registered:', reg.scope);
+          }
+        })
+        .catch(function () {
+          /* No sw.js deployed yet — the site still runs fine online. */
+        });
+    });
+  }
+
+  /* ==========================================================
+     6. INSTALL PROMPT CAPTURE (progressive enhancement)
+     ========================================================== */
+
+  window.__arcadeInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    window.__arcadeInstallPrompt = e;
+  });
+
+}());
+</script>
+
+</body>
+</html>
