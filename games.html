@@ -1069,11 +1069,14 @@
     .game__art {
       display: block;
       width: 100%;
-      aspect-ratio: 8/5;
+      height: 180px;
       object-fit: contain;
       object-position: center;
-      background: var(--ink-050);
-      padding: 14px 0;
+      background: radial-gradient(ellipse at 50% 90%, rgba(212, 245, 81, 0.08) 0%, rgba(17, 17, 20, 0) 65%), var(--ink-050);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line-soft);
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6));
+      transition: transform .2s ease, filter .2s ease;
     }
 
     .game__body {
@@ -1089,6 +1092,11 @@
         border-color: var(--line-hard);
         transform: translateY(-3px);
         box-shadow: var(--shadow-md);
+      }
+
+      .game:not(.game--soon):hover .game__art {
+        transform: translateY(-2px) scale(1.02);
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
       }
 
       .game:not(.game--soon):hover .game__idx {
@@ -2394,7 +2402,7 @@
           <article class="game" data-status="live">
             <img class="game__art" src="./cabinets/fwap.png"
               alt="Fwap Fwap Fwap arcade cabinet — &quot;Fwap Fwap Fwap&quot; marquee over the game screen"
-              loading="lazy" decoding="async" width="1100" height="678">
+              loading="lazy" decoding="async" width="238" height="319">
             <div class="game__body">
               <div class="game__top">
                 <span class="game__idx">01</span>
