@@ -1154,9 +1154,10 @@
     /* Dedicated crisp cabinet stage */
     .cab-stage {
       position: relative;
-      height: 140px;
+      height: 330px;
       width: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       background: radial-gradient(ellipse at 50% 90%, rgba(212, 245, 81, 0.09) 0%, rgba(17, 17, 20, 0) 65%), var(--ink-050);
@@ -1165,36 +1166,44 @@
     }
     .cab-stage__art {
       display: block;
-      max-height: 124px;
-      width: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
       transition: transform .25s ease;
     }
     @media (hover:hover) {
       .cab-card:hover .cab-stage__art {
-        transform: scale(1.04) translateY(-2px);
+        transform: scale(1.03);
       }
     }
 
-    /* Stylized retro marquees for cabinets without 3D art yet */
+    /* Cabinet CRT simulation for cards without 3D art */
+    .cab-stage--crt {
+      padding: 14px 12px 10px;
+      justify-content: space-between;
+      background: radial-gradient(ellipse at 50% 30%, #151720 0%, #0a0b0e 100%);
+    }
+
+    /* Stylized retro marquees */
     .cab-marquee {
-      width: 86%;
-      height: 78px;
+      width: 100%;
+      height: 72px;
       border-radius: var(--r-sm);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 8px;
+      padding: 6px 10px;
       text-align: center;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 20px rgba(0,0,0,.8), 0 4px 12px rgba(0,0,0,.5);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, .85), 0 4px 12px rgba(0, 0, 0, .5);
+      flex-shrink: 0;
     }
     .cab-marquee--klick {
       background: linear-gradient(135deg, #181920 0%, #0d0e12 100%);
-      border: 1px solid rgba(245,242,236,.18);
+      border: 1px solid rgba(245, 242, 236, .18);
     }
     .cab-marquee--klick .cab-marquee__text {
       font-family: var(--mono);
@@ -1209,7 +1218,7 @@
       font-size: 9px;
       letter-spacing: .18em;
       color: var(--signal);
-      background: rgba(212,245,81,.12);
+      background: rgba(212, 245, 81, .12);
       padding: 2px 6px;
       border-radius: 4px;
       margin-top: 4px;
@@ -1232,6 +1241,126 @@
       letter-spacing: .16em;
       color: #D4AF37;
       margin-top: 4px;
+    }
+
+    .cab-marquee--trail {
+      background: linear-gradient(135deg, #1c1815 0%, #0e0d0b 100%);
+      border: 1px dashed rgba(245, 242, 236, 0.22);
+    }
+    .cab-marquee--trail .cab-marquee__text {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      color: var(--paper-60);
+    }
+    .cab-marquee--trail .cab-marquee__sub {
+      font-family: var(--mono);
+      font-size: 8.5px;
+      letter-spacing: .14em;
+      color: var(--paper-42);
+      margin-top: 4px;
+    }
+
+    /* CRT Terminal Screen */
+    .cab-crt {
+      width: 100%;
+      flex: 1;
+      margin: 10px 0;
+      background: #060709;
+      border: 1px solid rgba(245, 242, 236, 0.12);
+      border-radius: 6px;
+      padding: 10px 12px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.4;
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.9);
+    }
+    .cab-crt::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0px, rgba(0, 0, 0, 0.3) 1px, transparent 1px, transparent 3px);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .cab-crt__line {
+      position: relative;
+      z-index: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cab-crt__bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(245, 242, 236, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 2px;
+      position: relative;
+      z-index: 1;
+    }
+    .cab-crt__fill {
+      height: 100%;
+      background: var(--signal);
+      border-radius: 999px;
+    }
+
+    /* Control Deck */
+    .cab-deck {
+      width: 100%;
+      height: 34px;
+      background: linear-gradient(180deg, #181920 0%, #0d0e12 100%);
+      border: 1px solid var(--line-hard);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      flex-shrink: 0;
+    }
+    .cab-deck__stick {
+      width: 11px;
+      height: 11px;
+      background: #e53935;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(229, 57, 53, 0.7);
+      position: relative;
+    }
+    .cab-deck__stick::after {
+      content: '';
+      position: absolute;
+      top: 9px;
+      left: 4px;
+      width: 3px;
+      height: 6px;
+      background: #888;
+    }
+    .cab-deck__buttons {
+      display: flex;
+      gap: 6px;
+    }
+    .cab-deck__btn {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--signal);
+      box-shadow: 0 0 5px var(--signal-32);
+    }
+    .cab-deck__btn--gold {
+      background: #ffd700;
+      box-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+    }
+    .cab-deck__btn--muted {
+      background: var(--paper-42);
+      box-shadow: none;
     }
 
     .cab-body {
@@ -2500,19 +2629,19 @@
         <div class="carousel-shell">
           <div class="carousel-track" id="floor-carousel" role="region" aria-label="Featured arcade cabinets" tabindex="0">
 
-            <!-- Cabinet 01: Portly Flapper -->
+            <!-- Cabinet 01: Fwap Fwap Fwap -->
             <article class="cab-card" data-idx="01">
               <div class="cab-stage">
-                <img class="cab-stage__art" src="./cabinets/fwap.png"
-                  alt="Portly Flapper arcade cabinet"
-                  loading="lazy" decoding="async" width="238" height="319">
+                <img class="cab-stage__art" src="./cabinets/fwapfwap.png"
+                  alt="Fwap Fwap Fwap arcade cabinet"
+                  loading="lazy" decoding="async" width="448" height="600">
               </div>
               <div class="cab-body">
                 <div class="cab-top">
                   <span class="cab-idx">01</span>
                   <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
                 </div>
-                <h3 class="cab-title">Portly Flapper</h3>
+                <h3 class="cab-title">Fwap Fwap Fwap</h3>
                 <p class="cab-desc">Dodge brown sectionals, raw milk jugs, and golden arches as JD, Bobby, and Diaper Don.</p>
                 <div class="cab-actions">
                   <a class="btn btn--paper cab-btn" href="./flapper/index.html">
@@ -2527,10 +2656,25 @@
 
             <!-- Cabinet 02: Klickashklic -->
             <article class="cab-card" data-idx="02">
-              <div class="cab-stage">
+              <div class="cab-stage cab-stage--crt">
                 <div class="cab-marquee cab-marquee--klick">
                   <span class="cab-marquee__text">KLICKASHKLIC</span>
-                  <span class="cab-marquee__sub">CLASSIFIED // FBI</span>
+                  <span class="cab-marquee__sub">DOORS LOCKED &bull; FBI ARCHIVE</span>
+                </div>
+                <div class="cab-crt">
+                  <div class="cab-crt__line" style="color:#7ee787;">&gt; FBI_SYS // AUTH_OK</div>
+                  <div class="cab-crt__line" style="color:var(--paper-80);">SUBPOENAS: 14 PENDING</div>
+                  <div class="cab-crt__line" style="color:var(--signal);">REDACTING MANIFEST...</div>
+                  <div class="cab-crt__line" style="color:var(--paper-42);">RATE: 9.8 CLICKS/SEC</div>
+                  <div class="cab-crt__bar"><div class="cab-crt__fill" style="width:83%;"></div></div>
+                </div>
+                <div class="cab-deck">
+                  <span class="cab-deck__stick" aria-hidden="true"></span>
+                  <div class="cab-deck__buttons" aria-hidden="true">
+                    <span class="cab-deck__btn"></span>
+                    <span class="cab-deck__btn"></span>
+                    <span class="cab-deck__btn"></span>
+                  </div>
                 </div>
               </div>
               <div class="cab-body">
@@ -2553,10 +2697,25 @@
 
             <!-- Cabinet 03: Bunker Muncher -->
             <article class="cab-card" data-idx="03">
-              <div class="cab-stage">
+              <div class="cab-stage cab-stage--crt">
                 <div class="cab-marquee cab-marquee--bunker">
                   <span class="cab-marquee__text">BUNKER MUNCHER</span>
                   <span class="cab-marquee__sub">EXECUTIVE IMMUNITY</span>
+                </div>
+                <div class="cab-crt">
+                  <div class="cab-crt__line" style="color:#ffd700;">&gt; IMMUNITY LEVEL: 100%</div>
+                  <div class="cab-crt__line" style="color:var(--paper-80);">DIET COKES CONSUMED: 4,821</div>
+                  <div class="cab-crt__line" style="color:#ff7b72;">GHOST 1: JEFFREY (ACTIVE)</div>
+                  <div class="cab-crt__line" style="color:#ffa657;">GHOST 2: MOHAMMED (APPROACH)</div>
+                  <div class="cab-crt__line" style="color:#ffd700;">FAST FOOD CACHE: SECURED</div>
+                </div>
+                <div class="cab-deck">
+                  <span class="cab-deck__stick" aria-hidden="true"></span>
+                  <div class="cab-deck__buttons" aria-hidden="true">
+                    <span class="cab-deck__btn cab-deck__btn--gold"></span>
+                    <span class="cab-deck__btn cab-deck__btn--gold"></span>
+                    <span class="cab-deck__btn cab-deck__btn--gold"></span>
+                  </div>
                 </div>
               </div>
               <div class="cab-body">

@@ -1085,9 +1085,10 @@
     /* Cabinet stage & artwork */
     .cab-stage {
       position: relative;
-      height: 140px;
+      height: 330px;
       width: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       background: radial-gradient(ellipse at 50% 90%, rgba(212, 245, 81, 0.09) 0%, rgba(17, 17, 20, 0) 65%), var(--ink-050);
@@ -1097,33 +1098,41 @@
 
     .cab-stage__art {
       display: block;
-      max-height: 124px;
-      width: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
       transition: transform .25s ease;
     }
 
     @media (hover:hover) {
       .game:not(.game--soon):hover .cab-stage__art {
-        transform: scale(1.04) translateY(-2px);
+        transform: scale(1.03);
       }
     }
 
-    /* Stylized retro marquees for cabinets without 3D art */
+    /* Cabinet CRT simulation for cards without 3D art */
+    .cab-stage--crt {
+      padding: 14px 12px 10px;
+      justify-content: space-between;
+      background: radial-gradient(ellipse at 50% 30%, #151720 0%, #0a0b0e 100%);
+    }
+
+    /* Stylized retro marquees */
     .cab-marquee {
-      width: 86%;
-      height: 78px;
+      width: 100%;
+      height: 72px;
       border-radius: var(--r-sm);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 8px;
+      padding: 6px 10px;
       text-align: center;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 20px rgba(0, 0, 0, .8), 0 4px 12px rgba(0, 0, 0, .5);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, .85), 0 4px 12px rgba(0, 0, 0, .5);
+      flex-shrink: 0;
     }
 
     .cab-marquee--klick {
@@ -1191,6 +1200,117 @@
       letter-spacing: .14em;
       color: var(--paper-42);
       margin-top: 4px;
+    }
+
+    /* CRT Terminal Screen */
+    .cab-crt {
+      width: 100%;
+      flex: 1;
+      margin: 10px 0;
+      background: #060709;
+      border: 1px solid rgba(245, 242, 236, 0.12);
+      border-radius: 6px;
+      padding: 10px 12px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.4;
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.9);
+    }
+
+    .cab-crt::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0px, rgba(0, 0, 0, 0.3) 1px, transparent 1px, transparent 3px);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .cab-crt__line {
+      position: relative;
+      z-index: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cab-crt__bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(245, 242, 236, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cab-crt__fill {
+      height: 100%;
+      background: var(--signal);
+      border-radius: 999px;
+    }
+
+    /* Control Deck */
+    .cab-deck {
+      width: 100%;
+      height: 34px;
+      background: linear-gradient(180deg, #181920 0%, #0d0e12 100%);
+      border: 1px solid var(--line-hard);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      flex-shrink: 0;
+    }
+
+    .cab-deck__stick {
+      width: 11px;
+      height: 11px;
+      background: #e53935;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(229, 57, 53, 0.7);
+      position: relative;
+    }
+
+    .cab-deck__stick::after {
+      content: '';
+      position: absolute;
+      top: 9px;
+      left: 4px;
+      width: 3px;
+      height: 6px;
+      background: #888;
+    }
+
+    .cab-deck__buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .cab-deck__btn {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--signal);
+      box-shadow: 0 0 5px var(--signal-32);
+    }
+
+    .cab-deck__btn--gold {
+      background: #ffd700;
+      box-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+    }
+
+    .cab-deck__btn--muted {
+      background: var(--paper-42);
+      box-shadow: none;
     }
 
     .game__body {
@@ -2485,8 +2605,8 @@
           <!-- Cabinet 01: Fwap Fwap Fwap -->
           <article class="game" data-status="live">
             <div class="cab-stage">
-              <img class="cab-stage__art" src="./cabinets/fwap.png"
-                alt="Fwap Fwap Fwap arcade cabinet" loading="lazy" decoding="async" width="238" height="319">
+              <img class="cab-stage__art" src="./cabinets/fwapfwap.png"
+                alt="Fwap Fwap Fwap arcade cabinet" loading="lazy" decoding="async" width="448" height="600">
             </div>
             <div class="game__body">
               <div class="game__top">
@@ -2508,10 +2628,25 @@
 
           <!-- Cabinet 02: Klickashklic -->
           <article class="game" data-status="live">
-            <div class="cab-stage">
+            <div class="cab-stage cab-stage--crt">
               <div class="cab-marquee cab-marquee--klick">
                 <span class="cab-marquee__text">KLICKASHKLIC</span>
-                <span class="cab-marquee__sub">DOORS LOCKED &bull; CLASSIFIED</span>
+                <span class="cab-marquee__sub">DOORS LOCKED &bull; FBI ARCHIVE</span>
+              </div>
+              <div class="cab-crt">
+                <div class="cab-crt__line" style="color:#7ee787;">&gt; FBI_SYS // AUTH_OK</div>
+                <div class="cab-crt__line" style="color:var(--paper-80);">SUBPOENAS: 14 PENDING</div>
+                <div class="cab-crt__line" style="color:var(--signal);">REDACTING MANIFEST...</div>
+                <div class="cab-crt__line" style="color:var(--paper-42);">RATE: 9.8 CLICKS/SEC</div>
+                <div class="cab-crt__bar"><div class="cab-crt__fill" style="width:83%;"></div></div>
+              </div>
+              <div class="cab-deck">
+                <span class="cab-deck__stick" aria-hidden="true"></span>
+                <div class="cab-deck__buttons" aria-hidden="true">
+                  <span class="cab-deck__btn"></span>
+                  <span class="cab-deck__btn"></span>
+                  <span class="cab-deck__btn"></span>
+                </div>
               </div>
             </div>
             <div class="game__body">
@@ -2534,10 +2669,25 @@
 
           <!-- Cabinet 03: Bunker Muncher -->
           <article class="game" data-status="live">
-            <div class="cab-stage">
+            <div class="cab-stage cab-stage--crt">
               <div class="cab-marquee cab-marquee--bunker">
                 <span class="cab-marquee__text">BUNKER MUNCHER</span>
                 <span class="cab-marquee__sub">EXECUTIVE IMMUNITY</span>
+              </div>
+              <div class="cab-crt">
+                <div class="cab-crt__line" style="color:#ffd700;">&gt; IMMUNITY LEVEL: 100%</div>
+                <div class="cab-crt__line" style="color:var(--paper-80);">DIET COKES CONSUMED: 4,821</div>
+                <div class="cab-crt__line" style="color:#ff7b72;">GHOST 1: JEFFREY (ACTIVE)</div>
+                <div class="cab-crt__line" style="color:#ffa657;">GHOST 2: MOHAMMED (APPROACH)</div>
+                <div class="cab-crt__line" style="color:#ffd700;">FAST FOOD CACHE: SECURED</div>
+              </div>
+              <div class="cab-deck">
+                <span class="cab-deck__stick" aria-hidden="true"></span>
+                <div class="cab-deck__buttons" aria-hidden="true">
+                  <span class="cab-deck__btn cab-deck__btn--gold"></span>
+                  <span class="cab-deck__btn cab-deck__btn--gold"></span>
+                  <span class="cab-deck__btn cab-deck__btn--gold"></span>
+                </div>
               </div>
             </div>
             <div class="game__body">
@@ -2560,10 +2710,25 @@
 
           <!-- Cabinet 04: The Tylenol Trail -->
           <article class="game game--soon" data-status="dev">
-            <div class="cab-stage">
+            <div class="cab-stage cab-stage--crt">
               <div class="cab-marquee cab-marquee--trail">
                 <span class="cab-marquee__text">TYLENOL TRAIL</span>
                 <span class="cab-marquee__sub">IN DEVELOPMENT &bull; OREGON 2026</span>
+              </div>
+              <div class="cab-crt">
+                <div class="cab-crt__line" style="color:var(--paper-60);">&gt; CONESTOGA CYBERTRUCK</div>
+                <div class="cab-crt__line" style="color:var(--paper-42);">BIG PHARMA VAULT: 820 MI</div>
+                <div class="cab-crt__line" style="color:#ff7b72;">WAGON WHEELS BROKEN: 3</div>
+                <div class="cab-crt__line" style="color:var(--signal);">RFK CHOLESTEROL: OPTIMAL</div>
+                <div class="cab-crt__line" style="color:var(--paper-42);">[ STATUS: PROTOTYPING ]</div>
+              </div>
+              <div class="cab-deck">
+                <span class="cab-deck__stick" aria-hidden="true"></span>
+                <div class="cab-deck__buttons" aria-hidden="true">
+                  <span class="cab-deck__btn cab-deck__btn--muted"></span>
+                  <span class="cab-deck__btn cab-deck__btn--muted"></span>
+                  <span class="cab-deck__btn cab-deck__btn--muted"></span>
+                </div>
               </div>
             </div>
             <div class="game__body">
