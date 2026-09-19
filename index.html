@@ -1044,20 +1044,89 @@
    GAMES
    ============================================================ */
 
-    .games {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: clamp(14px, 1.6vw, 20px);
+    /* ============================================================
+       FLOOR CAROUSEL & CABINET CARDS
+       Compact, swipeable arcade floor minimizing vertical footprint.
+       ============================================================ */
+
+    .carousel-shell {
+      position: relative;
+      margin-top: var(--s2);
     }
 
-    @media (min-width:760px) {
-      .games {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .carousel-track {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding: 10px 4px 22px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line-hard) transparent;
+    }
+    .carousel-track::-webkit-scrollbar {
+      height: 5px;
+    }
+    .carousel-track::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .carousel-track::-webkit-scrollbar-thumb {
+      background: var(--line-hard);
+      border-radius: 999px;
+    }
+
+    .carousel-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .carousel-btn {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink-100);
+      border: 1px solid var(--line-hard);
+      border-radius: 999px;
+      color: var(--paper-80);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+      transition: background .16s ease, border-color .16s ease, color .16s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @media (hover:hover) {
+      .carousel-btn:hover:not([disabled]) {
+        background: var(--signal);
+        border-color: var(--signal);
+        color: #0B0B0D;
+        box-shadow: 0 4px 12px var(--signal-32);
       }
     }
+    .carousel-btn[disabled] {
+      opacity: .25;
+      cursor: not-allowed;
+    }
+    .carousel-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--paper-42);
+      letter-spacing: .08em;
+      padding: 0 4px;
+      min-width: 48px;
+      text-align: center;
+    }
 
-    .game {
-      position: relative;
+    /* Cabinet Cards */
+    .cab-card {
+      flex: 0 0 280px;
+      width: 280px;
+      scroll-snap-align: start;
       display: flex;
       flex-direction: column;
       background: var(--ink-100);
@@ -1065,72 +1134,193 @@
       border-radius: var(--r-lg);
       box-shadow: var(--shadow-sm);
       overflow: hidden;
-      transition: background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    @media (hover:hover) {
+      .cab-card:not(.cab-card--soon):hover {
+        transform: translateY(-4px);
+        border-color: var(--line-hard);
+        box-shadow: var(--shadow-md);
+      }
+      .cab-card:not(.cab-card--soon):hover .cab-idx {
+        color: var(--signal);
+      }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .cab-card { transition: none; }
+      .cab-card:hover { transform: none; }
     }
 
-    .game__art {
-      display: block;
+    /* Dedicated crisp cabinet stage */
+    .cab-stage {
+      position: relative;
+      height: 140px;
       width: 100%;
-      height: 180px;
-      object-fit: contain;
-      object-position: center;
-      background: radial-gradient(ellipse at 50% 90%, rgba(212, 245, 81, 0.08) 0%, rgba(17, 17, 20, 0) 65%), var(--ink-050);
-      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at 50% 90%, rgba(212, 245, 81, 0.09) 0%, rgba(17, 17, 20, 0) 65%), var(--ink-050);
       border-bottom: 1px solid var(--line-soft);
-      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6));
-      transition: transform .2s ease, filter .2s ease;
+      overflow: hidden;
+    }
+    .cab-stage__art {
+      display: block;
+      max-height: 124px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.7));
+      transition: transform .25s ease;
+    }
+    @media (hover:hover) {
+      .cab-card:hover .cab-stage__art {
+        transform: scale(1.04) translateY(-2px);
+      }
     }
 
-    .game__body {
+    /* Stylized retro marquees for cabinets without 3D art yet */
+    .cab-marquee {
+      width: 86%;
+      height: 78px;
+      border-radius: var(--r-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0,0,0,.8), 0 4px 12px rgba(0,0,0,.5);
+    }
+    .cab-marquee--klick {
+      background: linear-gradient(135deg, #181920 0%, #0d0e12 100%);
+      border: 1px solid rgba(245,242,236,.18);
+    }
+    .cab-marquee--klick .cab-marquee__text {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      color: #FAFFEC;
+      text-shadow: 0 0 8px var(--signal);
+    }
+    .cab-marquee--klick .cab-marquee__sub {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .18em;
+      color: var(--signal);
+      background: rgba(212,245,81,.12);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+
+    .cab-marquee--bunker {
+      background: linear-gradient(135deg, #241f14 0%, #12100a 100%);
+      border: 1px solid rgba(255, 215, 0, 0.28);
+    }
+    .cab-marquee--bunker .cab-marquee__text {
+      font-size: 14px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      color: #FFECA8;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    }
+    .cab-marquee--bunker .cab-marquee__sub {
+      font-family: var(--mono);
+      font-size: 8.5px;
+      letter-spacing: .16em;
+      color: #D4AF37;
+      margin-top: 4px;
+    }
+
+    .cab-body {
+      padding: 16px 18px 18px;
       display: flex;
       flex-direction: column;
       flex: 1;
-      padding: clamp(24px, 3vw, 34px);
     }
-
+    .cab-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .cab-idx {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--paper-42);
+      letter-spacing: .12em;
+      transition: color .2s ease;
+    }
+    .cab-title {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      color: var(--paper);
+    }
+    .cab-desc {
+      margin: 0 0 14px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--paper-60);
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .cab-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .cab-btn {
+      min-height: 38px;
+      padding: 9px 14px;
+      font-size: 13px;
+      border-radius: 999px;
+    }
+    .cab-offline {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--paper-42);
+      text-decoration: none;
+      text-align: center;
+      transition: color .16s ease;
+      letter-spacing: .02em;
+    }
     @media (hover:hover) {
-      .game:not(.game--soon):hover {
-        background: var(--ink-150);
-        border-color: var(--line-hard);
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-md);
-      }
-
-      .game:not(.game--soon):hover .game__art {
-        transform: translateY(-2px) scale(1.02);
-        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
-      }
-
-      .game:not(.game--soon):hover .game__idx {
+      .cab-offline:hover {
         color: var(--signal);
       }
     }
 
-    @media (prefers-reduced-motion:reduce) {
-      .game {
-        transition: none;
-      }
-
-      .game:hover {
-        transform: none;
-      }
+    /* Browse/Doorway Card in Carousel */
+    .cab-card--browse {
+      border-style: dashed;
+      background: var(--ink-050);
+      justify-content: center;
+      text-align: center;
+      padding: 24px 20px;
     }
-
-    .game__top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: clamp(20px, 3vw, 30px);
+    .cab-card--browse .cab-title {
+      font-size: 19px;
+      margin-bottom: 8px;
     }
-
-    .game__idx {
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .12em;
-      color: var(--paper-28);
-      transition: color .2s ease;
+    .cab-card--browse .cab-desc {
+      -webkit-line-clamp: 3;
+      margin-bottom: 16px;
+    }
+    @media (hover:hover) {
+      .cab-card--browse:hover .btn--line {
+        --btn-bg: rgba(212, 245, 81, .14);
+        --btn-bd: var(--signal-32);
+        --btn-fg: var(--signal-lift);
+      }
     }
 
     .pill {
@@ -1139,92 +1329,28 @@
       align-items: center;
       gap: 6px;
       font-family: var(--mono);
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       letter-spacing: .14em;
       text-transform: uppercase;
-      padding: 5px 10px;
+      padding: 4px 8px;
       border-radius: 999px;
       white-space: nowrap;
     }
-
     .pill--live {
       color: var(--paper);
       background: var(--signal-16);
       border: 1px solid var(--signal-32);
     }
-
     .pill--live .dot {
-      width: 5px;
-      height: 5px;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
       background: var(--signal);
     }
-
     .pill--soon {
       color: var(--paper-42);
       border: 1px solid var(--line);
-    }
-
-    .game__title {
-      margin: 0 0 12px;
-      font-size: clamp(26px, 3.4vw, 36px);
-      font-weight: 800;
-      line-height: 1.02;
-      letter-spacing: -.038em;
-      color: var(--paper);
-    }
-
-    .game--soon .game__title {
-      color: var(--paper-42);
-    }
-
-    /* The link-out tile that replaces a fixed 4th card on the homepage
-   teaser — visually a doorway, not another cabinet. */
-    .game--browse {
-      border-style: dashed;
-      background: var(--ink-050);
-    }
-
-    .game--browse .game__body {
-      justify-content: center;
-    }
-
-    .game--browse .game__title {
-      color: var(--paper-80);
-    }
-
-    .game--browse .game__desc {
-      max-width: none;
-    }
-
-    @media (hover:hover) {
-      .game--browse:hover .btn--line {
-        --btn-bg: rgba(212, 245, 81, .14);
-        --btn-bd: var(--signal-32);
-        --btn-fg: var(--signal-lift);
-      }
-    }
-
-    .game__desc {
-      margin: 0 0 clamp(22px, 3vw, 30px);
-      font-size: 15.5px;
-      line-height: 1.68;
-      color: var(--paper-60);
-      flex: 1;
-      max-width: 46ch;
-    }
-
-    .game__actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .game__actions .btn {
-      width: auto;
-      flex: 1 1 auto;
-      min-width: 140px;
     }
 
     /* ============================================================
@@ -2360,107 +2486,112 @@
           <span class="sechead__idx">01</span>
           <h2 class="sechead__title" id="games-title">The floor</h2>
           <span class="sechead__rule" aria-hidden="true"></span>
-          <a class="sechead__meta sechead__meta--link" href="games.html">All cabinets &rarr;</a>
+          <div class="carousel-nav">
+            <button class="carousel-btn" data-carousel-prev aria-label="Previous cabinets">&#8592;</button>
+            <span class="carousel-count" data-carousel-count>01 / 04</span>
+            <button class="carousel-btn" data-carousel-next aria-label="Next cabinets">&#8594;</button>
+            <a class="sechead__meta sechead__meta--link" href="games.html" style="margin-left: 10px;">All cabinets &rarr;</a>
+          </div>
         </div>
-        <p class="seclede">
-          Every cabinet runs free in your browser, on any device, with nothing to install and no account to make.
-          Offline editions are a standalone copy you keep &mdash; a thank-you for a tip, never a requirement.
-          New cabinets ship on their own schedule &mdash; the full, ever-growing catalogue lives on
-          <a href="games.html">the arcade page</a>.
+        <p class="seclede" style="margin-bottom: var(--s3);">
+          Every cabinet runs free in your browser with nothing to install. Offline editions are a standalone copy you keep &mdash; a thank-you for a tip.
         </p>
 
-        <div class="games">
+        <div class="carousel-shell">
+          <div class="carousel-track" id="floor-carousel" role="region" aria-label="Featured arcade cabinets" tabindex="0">
 
-          <article class="game">
-            <img class="game__art" src="./cabinets/fwap.png"
-              alt="Fwap Fwap Fwap arcade cabinet — &quot;Fwap Fwap Fwap&quot; marquee over the game screen"
-              loading="lazy" decoding="async" width="238" height="319">
-            <div class="game__body">
-              <div class="game__top">
-                <span class="game__idx">01</span>
-                <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+            <!-- Cabinet 01: Portly Flapper -->
+            <article class="cab-card" data-idx="01">
+              <div class="cab-stage">
+                <img class="cab-stage__art" src="./cabinets/fwap.png"
+                  alt="Portly Flapper arcade cabinet"
+                  loading="lazy" decoding="async" width="238" height="319">
               </div>
-              <h3 class="game__title">Portly Flapper</h3>
-              <p class="game__desc">Dodge brown sectionals, raw milk jugs, and golden arches as JD, Bobby, and Diaper
-                Don.</p>
-              <div class="game__actions">
-                <a class="btn btn--paper" href="./flapper/index.html">
-                  <span class="ico" aria-hidden="true">&#9654;</span> Play free<span class="sr-only">: Portly
-                    Flapper</span>
-                </a>
-                <a class="btn btn--quiet" href="https://buy.stripe.com/your_flapper_offline_link" target="_blank"
-                  rel="noopener noreferrer">
-                  <span class="ico" aria-hidden="true">&#8681;</span> Offline copy &mdash; $5+<span class="sr-only">:
-                    Portly Flapper</span>
-                </a>
+              <div class="cab-body">
+                <div class="cab-top">
+                  <span class="cab-idx">01</span>
+                  <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+                </div>
+                <h3 class="cab-title">Portly Flapper</h3>
+                <p class="cab-desc">Dodge brown sectionals, raw milk jugs, and golden arches as JD, Bobby, and Diaper Don.</p>
+                <div class="cab-actions">
+                  <a class="btn btn--paper cab-btn" href="./flapper/index.html">
+                    <span class="ico" aria-hidden="true">&#9654;</span> Play free
+                  </a>
+                  <a class="cab-offline" href="https://buy.stripe.com/your_flapper_offline_link" target="_blank" rel="noopener noreferrer">
+                    Offline copy &mdash; $5+
+                  </a>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <article class="game">
-            <div class="game__body">
-              <div class="game__top">
-                <span class="game__idx">02</span>
-                <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+            <!-- Cabinet 02: Klickashklic -->
+            <article class="cab-card" data-idx="02">
+              <div class="cab-stage">
+                <div class="cab-marquee cab-marquee--klick">
+                  <span class="cab-marquee__text">KLICKASHKLIC</span>
+                  <span class="cab-marquee__sub">CLASSIFIED // FBI</span>
+                </div>
               </div>
-              <h3 class="game__title">Klickashklic</h3>
-              <p class="game__desc">Kash Patel locks the FBI doors. Click furiously to redact flight manifests and
-                protect the boss before subpoenas hit.</p>
-              <div class="game__actions">
-                <a class="btn btn--paper" href="./klickashklic/index.html">
-                  <span class="ico" aria-hidden="true">&#9654;</span> Play free<span class="sr-only">:
-                    Klickashklic</span>
-                </a>
-                <a class="btn btn--quiet" href="https://buy.stripe.com/your_klickashklic_offline_link" target="_blank"
-                  rel="noopener noreferrer">
-                  <span class="ico" aria-hidden="true">&#8681;</span> Offline copy &mdash; $5+<span class="sr-only">:
-                    Klickashklic</span>
-                </a>
+              <div class="cab-body">
+                <div class="cab-top">
+                  <span class="cab-idx">02</span>
+                  <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+                </div>
+                <h3 class="cab-title">Klickashklic</h3>
+                <p class="cab-desc">Kash Patel locks the FBI doors. Click furiously to redact flight manifests before subpoenas hit.</p>
+                <div class="cab-actions">
+                  <a class="btn btn--paper cab-btn" href="./klickashklic/index.html">
+                    <span class="ico" aria-hidden="true">&#9654;</span> Play free
+                  </a>
+                  <a class="cab-offline" href="https://buy.stripe.com/your_klickashklic_offline_link" target="_blank" rel="noopener noreferrer">
+                    Offline copy &mdash; $5+
+                  </a>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <article class="game">
-            <div class="game__body">
-              <div class="game__top">
-                <span class="game__idx">03</span>
-                <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+            <!-- Cabinet 03: Bunker Muncher -->
+            <article class="cab-card" data-idx="03">
+              <div class="cab-stage">
+                <div class="cab-marquee cab-marquee--bunker">
+                  <span class="cab-marquee__text">BUNKER MUNCHER</span>
+                  <span class="cab-marquee__sub">EXECUTIVE IMMUNITY</span>
+                </div>
               </div>
-              <h3 class="game__title">Bunker Muncher</h3>
-              <p class="game__desc">Navigate the gold ballroom bunker, chomp fast food, and dodge Jeffrey and Mohammed
-                under Executive Immunity.</p>
-              <div class="game__actions">
-                <a class="btn btn--paper" href="./bunker/index.html">
-                  <span class="ico" aria-hidden="true">&#9654;</span> Play free<span class="sr-only">: Bunker
-                    Muncher</span>
-                </a>
-                <a class="btn btn--quiet" href="https://buy.stripe.com/your_bunker_offline_link" target="_blank"
-                  rel="noopener noreferrer">
-                  <span class="ico" aria-hidden="true">&#8681;</span> Offline copy &mdash; $5+<span class="sr-only">:
-                    Bunker Muncher</span>
-                </a>
+              <div class="cab-body">
+                <div class="cab-top">
+                  <span class="cab-idx">03</span>
+                  <span class="pill pill--live"><span class="dot" aria-hidden="true"></span>Live</span>
+                </div>
+                <h3 class="cab-title">Bunker Muncher</h3>
+                <p class="cab-desc">Navigate the gold ballroom bunker, chomp fast food, and dodge Jeffrey and Mohammed.</p>
+                <div class="cab-actions">
+                  <a class="btn btn--paper cab-btn" href="./bunker/index.html">
+                    <span class="ico" aria-hidden="true">&#9654;</span> Play free
+                  </a>
+                  <a class="cab-offline" href="https://buy.stripe.com/your_bunker_offline_link" target="_blank" rel="noopener noreferrer">
+                    Offline copy &mdash; $5+
+                  </a>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
 
-          <article class="game game--browse">
-            <div class="game__body">
-              <div class="game__top">
-                <span class="game__idx">04+</span>
+            <!-- Cabinet 04+: Browse all cabinets -->
+            <article class="cab-card cab-card--browse" data-idx="04">
+              <div class="cab-top" style="justify-content: center; margin-bottom: 12px;">
+                <span class="cab-idx">04+</span>
               </div>
-              <h3 class="game__title">More on the floor</h3>
-              <p class="game__desc">
-                New cabinets, and the ones still in development, ship straight to the full arcade page
-                as they're built &mdash; this shelf stays put.
+              <h3 class="cab-title">More on the floor</h3>
+              <p class="cab-desc">
+                Browse unreleased prototypes, games in development, and the full arcade shelf.
               </p>
-              <div class="game__actions">
-                <a class="btn btn--line" href="games.html">
-                  Browse the full arcade <span class="ico" aria-hidden="true">&rarr;</span>
-                </a>
-              </div>
-            </div>
-          </article>
+              <a class="btn btn--line cab-btn" href="games.html">
+                Browse full arcade <span class="ico" aria-hidden="true">&rarr;</span>
+              </a>
+            </article>
 
+          </div>
         </div>
       </div>
     </section>
@@ -3180,11 +3311,51 @@
          6. INSTALL PROMPT CAPTURE (progressive enhancement)
          ========================================================== */
 
-      window.__arcadeInstallPrompt = null;
-      window.addEventListener('beforeinstallprompt', function (e) {
-        e.preventDefault();
-        window.__arcadeInstallPrompt = e;
-      });
+      /* ==========================================================
+         7. FLOOR CAROUSEL CONTROLLER
+         Smooth scroll-snap with left/right buttons & indicator.
+         ========================================================== */
+
+      var floorTrack = document.getElementById('floor-carousel');
+      var floorPrev = document.querySelector('[data-carousel-prev]');
+      var floorNext = document.querySelector('[data-carousel-next]');
+      var floorCount = document.querySelector('[data-carousel-count]');
+
+      if (floorTrack) {
+        var floorCards = floorTrack.querySelectorAll('.cab-card');
+        var floorTotal = floorCards.length;
+
+        function updateFloorCarousel() {
+          var scrollLeft = floorTrack.scrollLeft;
+          var maxScroll = floorTrack.scrollWidth - floorTrack.clientWidth;
+          if (floorPrev) floorPrev.disabled = scrollLeft <= 8;
+          if (floorNext) floorNext.disabled = scrollLeft >= maxScroll - 8;
+
+          var cardW = floorCards[0] ? floorCards[0].offsetWidth + 18 : 298;
+          var currentIdx = Math.min(Math.round(scrollLeft / cardW) + 1, floorTotal);
+          if (floorCount) {
+            floorCount.textContent = (currentIdx < 10 ? '0' + currentIdx : currentIdx) + ' / ' + (floorTotal < 10 ? '0' + floorTotal : floorTotal);
+          }
+        }
+
+        if (floorPrev) {
+          floorPrev.addEventListener('click', function () {
+            var step = floorCards[0] ? floorCards[0].offsetWidth + 18 : 298;
+            floorTrack.scrollBy({ left: -step, behavior: 'smooth' });
+          });
+        }
+
+        if (floorNext) {
+          floorNext.addEventListener('click', function () {
+            var step = floorCards[0] ? floorCards[0].offsetWidth + 18 : 298;
+            floorTrack.scrollBy({ left: step, behavior: 'smooth' });
+          });
+        }
+
+        floorTrack.addEventListener('scroll', updateFloorCarousel, { passive: true });
+        window.addEventListener('resize', updateFloorCarousel);
+        updateFloorCarousel();
+      }
 
     }());
   </script>
