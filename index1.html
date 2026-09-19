@@ -1072,9 +1072,10 @@
       display: block;
       width: 100%;
       aspect-ratio: 8/5;
-      object-fit: cover;
-      object-position: 50% 15%;
+      object-fit: contain;
+      object-position: center;
       background: var(--ink-050);
+      padding: 14px 0;
     }
 
     .game__body {
@@ -2363,8 +2364,9 @@
         <div class="games">
 
           <article class="game">
-            <img class="game__art" src="./cabinets/fwap.png" alt="Fwap Fwap Fwap" loading="lazy" decoding="async"
-              width="1100" height="678">
+            <img class="game__art" src="./cabinets/fwap.png"
+              alt="Fwap Fwap Fwap arcade cabinet — &quot;Fwap Fwap Fwap&quot; marquee over the game screen"
+              loading="lazy" decoding="async" width="1100" height="678">
             <div class="game__body">
               <div class="game__top">
                 <span class="game__idx">01</span>
