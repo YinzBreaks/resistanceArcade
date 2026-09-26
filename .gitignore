@@ -1,0 +1,39 @@
+# ── ART NEVER ENTERS THIS REPO ─────────────────────────────
+# Cabinet art and any large media live here locally and are served
+# from Vercel Blob, the same way the PIXL8 art site does it.
+media/
+assets/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.avif
+*.gif
+*.tif
+*.tiff
+*.psd
+*.kra
+*.procreate
+*.mp4
+*.mov
+*.webm
+*.m4v
+*.aep
+*.aep.*
+
+# TEMPORARY EXCEPTION — the only art still served from git.
+# The live floor references this file, so untracking it now would break
+# the deployed site. Remove this exception as soon as it is on Blob.
+!cabinets/fwapfwap.png
+
+# Byte-identical copy of index.html (same md5). Kept on disk, out of git
+# and out of deploys. Delete it when you're sure you don't want it.
+index1.html
+
+# tooling
+node_modules/
+.vercel/
+.env*
+__pycache__/
+.DS_Store
+Thumbs.db
