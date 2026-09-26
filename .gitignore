@@ -36,3 +36,6 @@ Thumbs.db
 # local render-diff baseline (not part of the site)
 .baseline/
 .claude/
+
+.vercel
+.env*

@@ -110,16 +110,31 @@ const redirects = (config.redirects ?? []).map((r) => ({
 // Proxy a rewrite the way Vercel does: same URL in the browser, someone
 // else's bytes in the response, and THIS project's headers on top.
 const proxy = async (dest, match, req, res, pathname) => {
-  const target = dest.replace(/:(\w+)\*?/g, () => match[1] ?? "");
+  // the captured tail is re-encoded: fetch() needs a valid URL, and the
+  // cabinets have asset names with spaces in them
+  const tail = (match[1] ?? "").split("/").map(encodeURIComponent).join("/");
+  const target = dest.replace(/:(\w+)\*?/g, () => tail);
   try {
-    const upstream = await fetch(target, { headers: { accept: req.headers.accept ?? "*/*" }, redirect: "follow" });
+    // Range must be forwarded, or <audio> gets a 200 with the whole file
+    // instead of a 206 and playback breaks on anything long.
+    const fwd = { accept: req.headers.accept ?? "*/*" };
+    if (req.headers.range) fwd.range = req.headers.range;
+
+    const upstream = await fetch(target, { headers: fwd, redirect: "follow" });
     const body = Buffer.from(await upstream.arrayBuffer());
-    res.writeHead(upstream.status, {
+
+    const out = {
       "Content-Type": upstream.headers.get("content-type") ?? "application/octet-stream",
       ...headersFor(pathname),
-    });
+    };
+    for (const h of ["content-range", "accept-ranges"]) {
+      const v = upstream.headers.get(h);
+      if (v) out[h] = v;
+    }
+
+    res.writeHead(upstream.status, out);
     res.end(body);
-    console.log(`${upstream.status} ${pathname} -> ${target}`);
+    console.log(`${upstream.status} ${pathname}${req.headers.range ? " [range]" : ""} -> ${target}`);
   } catch (err) {
     console.error(`502 ${pathname} -> ${target}: ${err.message}`);
     res.writeHead(502, { "Content-Type": "text/plain", ...headersFor(pathname) }).end("upstream failed");
