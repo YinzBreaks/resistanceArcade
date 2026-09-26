@@ -37,3 +37,7 @@ node_modules/
 __pycache__/
 .DS_Store
 Thumbs.db
+
+# local render-diff baseline (not part of the site)
+.baseline/
+.claude/
