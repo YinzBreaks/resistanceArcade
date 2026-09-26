@@ -34,25 +34,70 @@ const TYPES = {
 const config = JSON.parse(await readFile(join(ROOT, "vercel.json"), "utf8"));
 
 // Vercel's `source` globs, reduced to what this file actually uses.
-// Parenthesised groups — "(.*)", "(css|js)" — are kept as real regex; every
-// other character is escaped. Escaping first would destroy the groups.
+// Parenthesised groups — "(.*)", "(css|js)", "((?!a|b).*)" — are kept as real
+// regex; every other character is escaped. Escaping first would destroy the
+// groups, and the brace counter is needed because lookaheads nest parens.
 const toRegExp = (source) => {
-  const group = /\(([^)]*)\)/g;
   const esc = (s) => s.replace(/[.*+?^${}|[\]\\]/g, "\\$&");
   let out = "";
-  let last = 0;
-  let m;
-  while ((m = group.exec(source))) {
-    out += esc(source.slice(last, m.index)) + "(" + m[1] + ")";
-    last = m.index + m[0].length;
+  let buf = "";
+  let depth = 0;
+  for (const ch of source) {
+    if (ch === "(") {
+      if (depth === 0) {
+        out += esc(buf);
+        buf = "";
+      }
+      depth++;
+      buf += ch;
+    } else if (ch === ")") {
+      depth--;
+      buf += ch;
+      if (depth === 0) {
+        out += buf;
+        buf = "";
+      }
+    } else if (depth === 0 && buf === "" && "?*+".includes(ch) && out.endsWith(")")) {
+      // a quantifier on the group just closed — "(/.*)?" — keep it as regex
+      out += ch;
+    } else {
+      buf += ch;
+    }
   }
-  return new RegExp("^" + out + esc(source.slice(last)) + "$");
+  out += depth === 0 ? esc(buf) : buf;
+  // ":path*" style params -> a capture that eats the rest
+  out = out.replace(/:(\w+)\\\*/g, "(.*)").replace(/:(\w+)/g, "([^/]+)");
+  return new RegExp("^" + out + "$");
 };
 
 const rules = (config.headers ?? []).map((r) => ({
   test: toRegExp(r.source),
   headers: r.headers,
 }));
+
+const rewrites = (config.rewrites ?? []).map((r) => ({
+  test: toRegExp(r.source),
+  destination: r.destination,
+}));
+
+// Proxy a rewrite the way Vercel does: same URL in the browser, someone
+// else's bytes in the response, and THIS project's headers on top.
+const proxy = async (dest, match, req, res, pathname) => {
+  const target = dest.replace(/:(\w+)\*?/g, () => match[1] ?? "");
+  try {
+    const upstream = await fetch(target, { headers: { accept: req.headers.accept ?? "*/*" }, redirect: "follow" });
+    const body = Buffer.from(await upstream.arrayBuffer());
+    res.writeHead(upstream.status, {
+      "Content-Type": upstream.headers.get("content-type") ?? "application/octet-stream",
+      ...headersFor(pathname),
+    });
+    res.end(body);
+    console.log(`${upstream.status} ${pathname} -> ${target}`);
+  } catch (err) {
+    console.error(`502 ${pathname} -> ${target}: ${err.message}`);
+    res.writeHead(502, { "Content-Type": "text/plain", ...headersFor(pathname) }).end("upstream failed");
+  }
+};
 
 const headersFor = (pathname) => {
   const out = {};
@@ -66,7 +111,14 @@ const headersFor = (pathname) => {
 
 createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
-  let pathname = decodeURIComponent(url.pathname);
+  const rawPath = decodeURIComponent(url.pathname);
+
+  for (const r of rewrites) {
+    const m = rawPath.match(r.test);
+    if (m) return proxy(r.destination, m, req, res, rawPath);
+  }
+
+  let pathname = rawPath;
   if (pathname.endsWith("/")) pathname += "index.html";
 
   // keep requests inside ROOT
