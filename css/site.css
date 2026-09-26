@@ -2686,3 +2686,36 @@ FOOTER
 
 [data-page="games"] .pill { letter-spacing: .12em; }
 [data-page="games"] .pill--live .dot { width: 5px; height: 5px; }
+
+
+/* ============================================================
+   CRT TERMINAL LINES + SMALL UTILITIES
+   Replaces the inline style="" attributes these elements used to
+   carry. Inline style attributes are blocked by `style-src 'self'`,
+   so they cannot survive the site's Content-Security-Policy.
+   ============================================================ */
+
+:root {
+  --crt-ok:   #7ee787;
+  --crt-warn: #ffd700;
+  --crt-err:  #ff7b72;
+  --crt-alt:  #ffa657;
+}
+
+.cab-crt__line--ok     { color: var(--crt-ok); }
+.cab-crt__line--warn   { color: var(--crt-warn); }
+.cab-crt__line--err    { color: var(--crt-err); }
+.cab-crt__line--alt    { color: var(--crt-alt); }
+.cab-crt__line--bright { color: var(--paper-80); }
+.cab-crt__line--mid    { color: var(--paper-60); }
+.cab-crt__line--dim    { color: var(--paper-42); }
+.cab-crt__line--signal { color: var(--signal); }
+
+.cab-crt__fill--83 { width: 83%; }
+
+.sechead__meta--indent { margin-left: 10px; }
+.sechead__title--mt    { margin-top: 16px; }
+.seclede--mb           { margin-bottom: var(--s3); }
+.seclede--mt           { margin-top: 20px; }
+.strong-paper          { color: var(--paper); font-weight: 650; }
+.cab-top--centered     { justify-content: center; margin-bottom: 12px; }
