@@ -1,10 +1,31 @@
-// Local preview that sends the same headers as production, so CSP violations
-// show up in the console here instead of after a deploy.
+// Local preview that sends the same headers, redirects and rewrites as
+// production, so CSP violations show up in the console here instead of after
+// a deploy.
 //
 //   node tools/serve.mjs        -> http://localhost:4174
 //
 // Headers are read straight out of vercel.json: there is one source of truth,
 // and a header added there is exercised locally without touching this file.
+//
+// ── Why vercel.json looks the way it does ──────────────────────────────────
+// (it cannot say so itself — JSON has no comments, and Vercel's schema
+// rejects "//" keys with: headers[0] should NOT have additional property)
+//
+// Two CSP rules, not one. A rewrite is a server-side proxy, so this project's
+// headers land on the *games'* HTML. Each game is a single self-contained file
+// with an inline <script>, an inline <style> and inline style attributes, so
+// the hub's strict policy would leave three blank canvases. The cabinets get
+// 'unsafe-inline' for script and style and nothing else — no third-party
+// origin is reachable from a cabinet either, so zero-trust still holds.
+//
+// The hub's rule is a negative lookahead rather than a second rule overriding
+// the first, because a browser handed two CSP headers enforces their
+// INTERSECTION — which would strip the cabinets' 'unsafe-inline' right back
+// out. Do not "simplify" these into one rule.
+//
+// No "trailingSlash". The three /flapper -> /flapper/ redirects need it unset:
+// "trailingSlash": false strips the slash the redirect just added, and the two
+// fight each other into a redirect loop.
 
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
@@ -80,6 +101,12 @@ const rewrites = (config.rewrites ?? []).map((r) => ({
   destination: r.destination,
 }));
 
+const redirects = (config.redirects ?? []).map((r) => ({
+  test: toRegExp(r.source),
+  destination: r.destination,
+  status: r.permanent ? 308 : 307,
+}));
+
 // Proxy a rewrite the way Vercel does: same URL in the browser, someone
 // else's bytes in the response, and THIS project's headers on top.
 const proxy = async (dest, match, req, res, pathname) => {
@@ -112,6 +139,18 @@ const headersFor = (pathname) => {
 createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   const rawPath = decodeURIComponent(url.pathname);
+
+  // redirects run before rewrites, same as Vercel
+  for (const r of redirects) {
+    const m = rawPath.match(r.test);
+    if (m) {
+      const to = r.destination.replace(/:(\w+)\*?/g, () => m[1] ?? "");
+      console.log(`${r.status} ${rawPath} -> ${to}`);
+      res.writeHead(r.status, { Location: to, ...headersFor(rawPath) });
+      res.end();
+      return;
+    }
+  }
 
   for (const r of rewrites) {
     const m = rawPath.match(r.test);
